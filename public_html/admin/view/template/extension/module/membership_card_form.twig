@@ -1,0 +1,415 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="pull-right">
+			<button type="button" onclick="saveCard();" class="btn btn-primary"><i class="fa fa-save"></i> {{ button_save }}</button>
+		</div>
+		<div class="pull-left">
+			<h3>{{ text_form }}</h3>
+		</div>
+	</div>
+</div>
+<br>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#card-main-settings" data-toggle="tab">{{ text_main }}</a></li>
+	{% if card_id %} 
+	<li><a href="#card-history" data-toggle="tab">{{ text_history }}</a></li>
+	{% endif %} 
+</ul>
+<div class="tab-content">
+	<div class="tab-pane active" id="card-main-settings">
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="card-owner_status-enabled">{{ entry_card_status }}</label>
+		    <div class="col-sm-4">
+		      	<div class="radio-switch">
+		      	{% if status %} 
+					<input type="radio" name="status" value="0" id="card-owner_status-disabled">
+	                <label class="col-sm-4" for="card-owner_status-enabled">{{ text_disabled }}</label>
+		      		<input type="radio" name="status" value="1" id="card-owner_status-enabled" checked>
+	                <label class="col-sm-4" for="card-owner_status-disabled">{{ text_enabled }}</label>
+				{% else %} 
+	                <input type="radio" name="status" value="0" id="card-owner_status-disabled" checked>
+	                <label class="col-sm-4" for="card-owner_status-enabled">{{ text_disabled }}</label>
+	                <input type="radio" name="status" value="1" id="card-owner_status-enabled">
+	                <label class="col-sm-4" for="card-owner_status-disabled">{{ text_enabled }}</label>  
+				{% endif %} 
+		      	</div>
+		    </div>
+		</div>
+	    <div class="form-group required">
+	    	<label class="col-sm-2 control-label" for="cardowner"><span data-toggle="tooltip" title="{{ help_cardowner }}">{{ entry_cardowner }}</span></label>
+	    	<div class="col-sm-10">
+	    		<input type="text" name="cardowner" value="{{ cardowner['name'] }}" placeholder="{{ entry_cardowner }}" id="cardowner" class="form-control" />
+	    		<input type="hidden" name="customer_id" value="{{ cardowner['customer_id'] }}" id="customer_id" />
+	    		{% if error_cardowner %} 
+	    		<div class="text-danger">{{ error_cardowner }}</div>
+	    		{% endif %} 
+	    	</div>
+	    </div>
+	    <div class="form-group">
+	    	<label class="col-sm-2 control-label" for="telephone"><span data-toggle="tooltip" title="{{ help_telephone }}">{{ entry_telephone }}</span></label>
+	    	<div class="col-sm-10">
+	    		<input type="text" name="telephone" value="{{ telephone }}" placeholder="{{ entry_telephone }}" id="telephone" class="form-control" disabled />
+	    	</div>
+	    </div>
+	    <div class="form-group">
+	    	<label class="col-sm-2 control-label" for="email"><span data-toggle="tooltip" title="{{ help_email }}">{{ entry_email }}</span></label>
+	    	<div class="col-sm-10">
+	    		<input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="email" class="form-control" disabled />
+	    		{% if error_email %} 
+		    	<div class="text-danger">{{ error_email }}</div>
+		    	{% endif %} 
+	    	</div>
+	    </div>
+	    <div class="form-group required">
+	    	<label class="col-sm-2 control-label" for="card-code"><span data-toggle="tooltip" title="{{ help_code }}">{{ entry_code }}</span></label>
+	    	<div class="col-sm-10">
+	    		<div class="input-group">
+	    			<input type="text" name="code" value="{{ code }}" placeholder="{{ entry_code }}" id="card-code" class="form-control" />
+	    			<span class="input-group-btn">
+	    				<button id="generate-code" onclick="generateCardCode();" type="button" class="btn btn-info" data-toggle="tooltip" title="{{ button_generate }}"><i class="fa fa-cog"></i></button>
+	    			</span>
+	    		</div>
+	    		{% if error_code %} 
+	    		<div class="text-danger">{{ error_code }}</div>
+	    		{% endif %}	
+	    	</div>
+	    </div>
+	    <div class="form-group">
+	    	<label class="col-sm-2 control-label" for="card-date_start">{{ entry_start }}</label>
+	    	<div class="col-sm-4">
+	    		<div class="input-group date">
+	    			<input type="text" name="date_start" value="{{ date_start }}" placeholder="{{ entry_start }}" data-date-format="YYYY-MM-DD" id="card-date_start" class="form-control" />
+	    			<span class="input-group-btn">
+	    				<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+	    			</span>
+	    		</div>
+	    	</div>
+	    	<label class="col-sm-2 control-label" for="card-date_expiry">{{ entry_expiry }}</label>
+	    	<div class="col-sm-4">
+	    		<div class="input-group date">
+	    			<input type="text" name="date_expiry" value="{{ date_expiry }}" placeholder="{{ entry_expiry }}" data-date-format="YYYY-MM-DD" id="card-date_expiry" class="form-control" />
+	    			<span class="input-group-btn">
+	    				<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+	    			</span>
+	    		</div>
+	    	</div>
+	    </div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-table"></i> {{ text_discount_table }}</h3>
+			</div>
+			<div class="panel-body">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover" id="table-card-discounts">
+					    <thead>
+					        <tr>
+					            <td class="text-center">{{ column_discount_base }}</td>
+					            <td class="text-center">{{ column_discount_limit }}</td>
+					            <td class="text-center">{{ column_discount_value }}</td>
+					            <td class="text-center">{{ column_discount_type }}</td>
+					            <td class="text-center">{{ column_action }}</td>
+					        </tr>
+					    </thead>
+					    <tbody>
+					    {% if discount %} 
+						{% set count = 0 %} 
+							{% for discount in discount %} 
+							<tr>
+								<td>
+								    <select name="discount[{{ count }}][base]" id="discount-base" class="form-control">
+								    {% for v,n in discount_base %} 
+									    {% if v == discount['base'] %} 
+									    <option value="{{ v }}" selected="selected">{{ n }}</option>
+									    {% else %} 
+									    <option value="{{ v }}">{{ n }}</option>
+									    {% endif %} 
+									{% endfor %} 
+								    </select>
+								</td>
+								<td>
+								    <input type="text" name="discount[{{ count }}][limit]" value="{{ discount['limit'] }}" placeholder="{{ column_discount_limit }}" id="discount-limit" class="form-control" />
+								</td>
+								<td>
+								    <input type="text" name="discount[{{ count }}][value]" value="{{ discount['value'] }}" placeholder="{{ column_discount_value }}" id="discount-value" class="form-control" />
+								</td>
+								<td>
+								    <select name="discount[{{ count }}][type]" id="discount-type" class="form-control">
+								    {% for v,n in discount_type %} 
+								        {% if v == discount.type %} 
+								        <option value="{{ v }}" selected="selected">{{ n }}</option>
+								        {% else %} 
+								        <option value="{{ v }}">{{ n }}</option>
+								        {% endif %} 
+								    {% endfor %} 
+								    </select>
+								</td>
+								<td class="text-center">
+								    <button type="button" onclick="$(this).parents('tr').remove()" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+								</td>
+							</tr>
+							{% set count = count + 1 %} {% endfor %} 
+						{% endif %} 
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="4"></td>
+								<td class="text-center">
+								    <button type="button" onclick="addDiscount('table-card-discounts', 'discount');" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="card-category">{{ entry_categories }}</label>
+			<div class="col-sm-10">
+				<input type="text" name="category" value="" placeholder="{{ entry_categories }}" id="card-category" class="form-control" />
+				<div id="card-categories" class="well well-sm" style="height: 150px; overflow: auto;">
+				{% if categories %} 
+					{% for category in categories %} 
+					<div id="card-categories-{{ category['category_id'] }}"><i class="fa fa-minus-circle"></i> {{ category['name'] }} 
+						<input type="hidden" name="categories[]" value="{{ category['category_id'] }}" />
+					</div>
+					{% endfor %} 
+				{% endif %} 
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="card-product">{{ entry_products }}</label>
+			<div class="col-sm-10">
+				<input type="text" name="product" value="" placeholder="{{ entry_products }}" id="card-product" class="form-control" />
+				<div id="card-products" class="well well-sm" style="height: 150px; overflow: auto;">
+				{% if products %} 
+					{% for product in products %} 
+					<div id="card-products-{{ product['product_id'] }}"><i class="fa fa-minus-circle"></i> {{ product['name'] }} 
+						<input type="hidden" name="products[]" value="{{ product['product_id'] }}" />
+					</div>
+					{% endfor %} 
+				{% endif %} 
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="card-logged-enabled">{{ entry_logged }}</label>
+			<div class="col-sm-2">
+		      	<div class="radio-switch">
+		      	{% if not logged %} 
+					<input type="radio" name="logged" value="0" id="card-logged-disabled">
+	                <label class="col-sm-4" for="card-logged-enabled">{{ text_no }}</label>
+		      		<input type="radio" name="logged" value="1" id="card-logged-enabled" checked>
+	                <label class="col-sm-4" for="card-logged-disabled">{{ text_yes }}</label>
+				{% else %} 
+	                <input type="radio" name="logged" value="0" id="card-logged-disabled" checked>
+	                <label class="col-sm-4" for="card-logged-enabled">{{ text_no }}</label>
+	                <input type="radio" name="logged" value="1" id="card-logged-enabled">
+	                <label class="col-sm-4" for="card-logged-disabled">{{ text_yes }}</label>  
+				{% endif %} 
+		      	</div>
+		    </div>
+		</div>
+		<div class="form-group">    
+			<label class="col-sm-2 control-label" for="card-free_shipping-enabled">{{ entry_free_shipping }}</label>
+			<div class="col-sm-2">
+		      	<div class="radio-switch">
+		      	{% if not free_shipping %} 
+					<input type="radio" name="free_shipping" value="0" id="card-free_shipping-disabled">
+	                <label class="col-sm-4" for="card-free_shipping-enabled">{{ text_no }}</label>
+		      		<input type="radio" name="free_shipping" value="1" id="card-free_shipping-enabled" checked>
+	                <label class="col-sm-4" for="card-free_shipping-disabled">{{ text_yes }}</label>
+				{% else %} 
+	                <input type="radio" name="free_shipping" value="0" id="card-free_shipping-disabled" checked>
+	                <label class="col-sm-4" for="card-free_shipping-enabled">{{ text_no }}</label>
+	                <input type="radio" name="free_shipping" value="1" id="card-free_shipping-enabled">
+	                <label class="col-sm-4" for="card-free_shipping-disabled">{{ text_yes }}</label>  
+				{% endif %} 
+		      	</div>
+		    </div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="card-minimum_order_amount">{{ entry_minimum_order_amount }}</label>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<input type="text" name="minimum_order_amount" value="{{ minimum_order_amount }}" placeholder="{{ entry_minimum_order_amount }}" id="card-minimum_order_amount" class="form-control" />
+					<span class="input-group-addon">{{ currency_symbol }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="card-maximum_order_amount">{{ entry_maximum_order_amount }}</label>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<input type="text" name="maximum_order_amount" value="{{ maximum_order_amount }}" placeholder="{{ entry_maximum_order_amount }}" id="card-maximum_order_amount" class="form-control" />
+					<span class="input-group-addon">{{ currency_symbol }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="card-uses_total">{{ entry_uses_total }}</label>
+			<div class="col-sm-10">
+				<input type="text" name="uses_total" value="{{ uses_total }}" placeholder="{{ entry_uses_total }}" id="card-uses_total" class="form-control" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="card-uses_customer">{{ entry_uses_customer }}</label>
+			<div class="col-sm-10">
+				<input type="text" name="uses_customer" value="{{ uses_customer }}" placeholder="{{ entry_uses_customer }}" id="card-uses_customer" class="form-control" />
+			</div>
+		</div>
+	</div>
+    {% if card_id %} 
+    <div class="tab-pane" id="card-history"></div>
+    {% endif %} 
+</div>
+
+<script type="text/javascript"><!--
+function saveCard() {
+	var 
+		$container = $('#card-form'),
+		post_data = $container.find('input, select, textarea').serialize();
+	
+	$.ajax( {
+		url: '{{ action }}'.replace(/&amp;/g, '&'),
+		type: 'POST',
+		data: post_data,
+		dataType: 'html',
+		success: function (data, textStatus, jqXHR) {
+			if (data.match(/button\-cards\-list\-filter/i)) {
+				$('#menu-cards-list').tab('show');
+				$('#cards-list').html(data);
+			} else {
+				$container.html(data);
+			}
+		}
+	} );
+}
+
+function generateCardCode() {
+	$.ajax( {
+		url: 'index.php?route=extension/module/membership/getCardCode&user_token={{ user_token }}',
+		type: 'POST',
+		dataType: 'json',
+		beforeSend: function () {
+			$('#generate-code > i').addClass('fa-spin');
+		},
+		complete: function () {
+			$('#generate-code > i').removeClass('fa-spin');
+		},
+		success: function (json) {
+			if (json['code']) {
+				$('#card-code').val(json['code'][0]);
+			}
+ 
+		}
+	} );
+}
+
+$(function() {
+	$('.date').datetimepicker( {pickTime: false} );
+	
+	// Cardowner
+	$('#cardowner').autocomplete( {
+		'source': function(request, response) {
+			$.ajax( {
+				url: 'index.php?route=extension/module/membership/autocomplete&user_token={{ user_token }}',
+				type: 'POST',
+				data: 'cardowner=' +  encodeURIComponent(request),
+				dataType: 'json',
+				beforeSend: function () {},
+				complete: function () {},
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: '<i class="fa fa-user" aria-hidden="true"></i> ' + item['cardowner'] + ' <i class="fa fa-phone" aria-hidden="true"></i> ' + item['telephone'] + ' <i class="fa fa-envelope" aria-hidden="true"></i> ' + item['email'],
+							value: item['customer_id'],
+							cardowner: item['cardowner'],
+							telephone: item['telephone'],
+							email: item['email']
+						}
+					} ) );
+				}
+			});
+		},
+		'select': function(item) {
+			$(this).val(item['cardowner']);
+			$('#customer_id').val(item['value']);
+			$('#telephone').val(item['telephone']);
+			$('#email').val(item['email']);
+		}
+	});
+	
+	$('#cardowner').on('change', function() {
+		$('#customer_id').val('');
+	} );
+
+    // Categories
+    $('#card-category').autocomplete( {
+        'source': function(request, response) {
+            $.ajax( {
+                url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                dataType: 'json',
+                beforeSend: function () {},
+                complete: function () {},
+                success: function(json) {
+                    response($.map(json, function(item) {
+                        return {
+                            label: item['name'],
+                            value: item['category_id']
+                        }
+                    } ) );
+                }
+            } );
+        },
+        'select': function(item) {
+            this.value = '';
+
+            $('#card-categories-' + item['value']).remove();
+
+            $('#card-categories').append('<div id="card-categories-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="categories[]" value="' + item['value'] + '" /></div>');
+        }
+    } );
+
+    $('#card-categories').delegate('.fa-minus-circle', 'click', function() {
+        $(this).parent().remove();
+    } );
+	
+	// Products
+	$('#card-product').autocomplete( {
+		'source': function(request, response) {
+			$.ajax( {
+				url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+				dataType: 'json',
+				beforeSend: function () {},
+				complete: function () {},			
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: item['name'],
+							value: item['product_id']
+						}
+					} ) );
+				}
+			} );
+		},
+		'select': function(item) {
+			this.value = '';
+			
+			$('#card-products-' + item['value']).remove();
+			
+			$('#card-products').append('<div id="card-products-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="products[]" value="' + item['value'] + '" /></div>');	
+		}
+	} );
+
+	$('#card-products').delegate('.fa-minus-circle', 'click', function() {
+		$(this).parent().remove();
+	} );
+} );
+
+//--></script>
+{% if card_id %}
+<script type="text/javascript"><!--			
+$('#card-history').load('index.php?route=extension/module/membership/getCardHistory&user_token={{ user_token }}&card_id={{ card_id }}');
+//--></script>
+{% endif %}

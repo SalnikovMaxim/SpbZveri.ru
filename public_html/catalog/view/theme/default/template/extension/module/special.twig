@@ -1,0 +1,53 @@
+<div class="header-module">
+	<div class="container">
+		<div class="row">
+			<div class="header-module-left specials-header">
+			 <span>{{ heading_title }}</span>
+			</div>
+			<div class="header-module-right">
+				<a href="{{ special }}" title="Посмотреть все товары cо скидками">показать все<i class="icon icon-hand-pointer-o"></i></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="slider-product"> 
+		<div class="row row-product-category">
+		{% for product in products %}
+			<div class="product-thumb-category cols-5">
+			  <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a>
+			  {% if product.skidka %}<span class="sale">-{{ product.skidka }}%</span>{% endif %}
+			  </div>
+				 
+			  <div class="caption">
+				<h4 class="product-name"><a href="{{ product.href }}">{{ product.name }}</a></h4>
+				{% if product.rating %}
+				<div class="rating">{% for i in 1..5 %}
+				  {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+				  {% endfor %}</div>
+				{% endif %}
+				  </div> 
+			  <div class="button-group">
+				{% if product.price %}
+				<div class="price"> 
+					{% if not product.special %}
+						{{ product.price }}
+					{% else %} 
+					<div class="price-old">{{ product.price }}</div> 
+					<div class="price-new">{{ product.special }}</div> 
+					{% endif %}
+				</div>
+				{% endif %}
+				 
+				 <div class="wishliscompare">
+					<button type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="icon icon-heart-empty"></i></button>
+					<button type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="icon icon-exchange"></i></button>
+				</div>
+				<button type="button" onclick="cart.add('{{ product.product_id }}');" class="product-button"><i class="icon icon-basket"></i></button>
+			   
+			  </div>
+			</div>
+		  {% endfor %}
+		</div>
+	</div>
+</div>

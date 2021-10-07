@@ -1,0 +1,41 @@
+{{ header }}
+<div id="information-information" class="container">
+  <div itemscope="" itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+		<span itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem" class="breadcrumb-item">
+			{% if key + 1 < breadcrumbs|length %}
+			<a itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% else %}
+			<a rel="nofollow" itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% endif %}
+		</span>
+		{% endfor %}
+	</div>
+	
+	<h1 class="page-title">{{ heading_title }}</h1>
+	
+	<div class="articles">
+		<div class="row">
+			{% for articles in all_articles %}
+			<div class="articles-item">
+				<div class="articles-item-image">
+					<img src="{{ articles.image }}" alt="" />
+				</div>
+				<div class="articles-item-block">
+					<div class="articles-item-block-name"><a href="{{ articles.view }}">{{ articles.title }}</a></div>
+					<p class="articles-item-block-desc">{{ articles.description }}<a href="{{ articles.view }}">{{ text_view }}</a></p>
+					<div class="articles-item-block-data">{{ articles.date_added }}</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+ 
+</div>
+{{ footer }}

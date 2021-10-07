@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="adc02c1b-ac22-40a1-8bdb-2b220711a1bc" name="SpbZveri.ru">
+        <fileTransfer accessType="SFTP" host="spbzveri.ru" port="22" sshConfigId="13f635d3-aff0-469e-8aba-922533d2e2cd" sshConfig="reactxxx_maxim@spbzveri.ru:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

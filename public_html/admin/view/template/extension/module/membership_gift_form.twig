@@ -1,0 +1,218 @@
+{% if (error_warning) %} 
+<div class="alert alert-danger">
+  	<i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %} 
+<div class="pull-right">
+	<button type="button" onclick="saveGift();" class="btn btn-primary"><i class="fa fa-save"></i> {{ button_save }}</button>
+</div>
+<legend>{{ text_form }}</legend>
+<div class="tab-content">
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="gift-status-enabled">{{ entry_status }}</label>
+		<div class="col-sm-4">
+		    <div class="radio-switch">
+		    {% if status %} 
+				<input type="radio" name="status" value="0" id="gift-status-disabled">
+	            <label class="col-sm-4" for="gift-status-enabled">{{ text_disabled }}</label>
+		      	<input type="radio" name="status" value="1" id="gift-status-enabled" checked>
+	            <label class="col-sm-4" for="gift-status-disabled">{{ text_enabled }}</label>
+			{% else %} 
+	            <input type="radio" name="status" value="0" id="gift-status-disabled" checked>
+	            <label class="col-sm-4" for="gift-status-enabled">{{ text_disabled }}</label>
+	            <input type="radio" name="status" value="1" id="gift-status-enabled">
+	            <label class="col-sm-4" for="gift-status-disabled">{{ text_enabled }}</label>  
+			{% endif %} 
+		    </div>
+		</div>
+	</div>
+	<hr />
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-2">
+			<ul class="nav nav-tabs" role="tablist">
+			{% for language in languages %} 
+				<li {{ language_id == language['language_id'] ? ' class="active"' : '' }}><a href="#gift-{{ language['language_id'] }}" aria-controls="gift-{{ language['language_id'] }}" role="tab" data-toggle="tab"><img src="{{ language_flag[language['language_id']] }}" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+			{% endfor %}	
+			</ul>		
+		</div>
+	</div>
+	<div class="tab-content">
+	{% for language in languages %} 
+		<div role="tabpanel" class="tab-pane{{ language_id == language['language_id'] ? ' active' : '' }}" id="gift-{{ language['language_id'] }}">	
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="gift-name_{{ language['language_id'] }}"><span data-toggle="tooltip" title="{{ help_gift_name }}">{{ entry_name }}</span></label>
+				<div class="col-sm-10">
+					<input type="text" name="name[{{ language['language_id'] }}]" value="{{ name[language['language_id']] is defined ? name[language['language_id']] : '' }}" placeholder="{{ entry_name }}" id="gift-name_{{ language['language_id'] }}" class="form-control" />
+				</div>
+			</div>
+		</div>
+	{% endfor %} 
+	</div>
+	<hr />
+	<div class="form-group">
+	    <label class="col-sm-2 control-label" for="gift-threshold"><span data-toggle="tooltip" title="{{ help_gift_threshold }}">{{ entry_threshold }}</span></label>
+	    <div class="col-sm-10">
+	    	<div class="input-group">
+	    		<input type="text" name="threshold" value="{{ threshold }}" placeholder="{{ entry_threshold }}" id="gift-threshold" class="form-control" />
+	    		<span class="input-group-addon">{{ currency_symbol }}</span>
+	    	</div>
+	    </div>
+	</div>
+ 
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="gift-maximum_cost_gift"><span data-toggle="tooltip" title="{{ help_maximum_cost_gift }}">{{ entry_maximum_cost_gift }}</span></label>
+		<div class="col-sm-10">
+			<div class="input-group">
+				<input type="text" name="maximum_cost" value="{{ maximum_cost }}" placeholder="{{ entry_maximum_cost_gift }}" id="gift-maximum_cost_gift" class="form-control" />
+				<span class="input-group-addon">{{ currency_symbol }}</span>
+			</div>	
+		</div>
+    </div>
+ 
+    <div class="form-group">
+		<label class="col-sm-2 control-label" for="gift-giving_quantity"><span data-toggle="tooltip" title="{{ help_giving_quantity }}">{{ entry_giving_quantity }}</span></label>
+		<div class="col-sm-10">
+			<input type="text" name="giving_quantity" value="{{ giving_quantity }}" placeholder="{{ entry_giving_quantity }}" id="gift-giving_quantity" class="form-control" />
+		</div>
+    </div>
+	<div class="form-group">
+	    <label class="col-sm-2 control-label" for="gift-date_start">{{ entry_start }}</label>
+	    <div class="col-sm-4">
+	    	<div class="input-group date">
+	    		<input type="text" name="date_start" value="{{ date_start }}" placeholder="{{ entry_start }}" data-date-format="YYYY-MM-DD" id="gift-date_start" class="form-control" />
+	    		<span class="input-group-btn">
+	    			<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+	    		</span>
+	    	</div>
+	    </div>
+	    <label class="col-sm-2 control-label" for="gift-date_expiry">{{ entry_expiry }}</label>
+	    <div class="col-sm-4">
+	    	<div class="input-group date">
+	    		<input type="text" name="date_expiry" value="{{ date_expiry }}" placeholder="{{ entry_expiry }}" data-date-format="YYYY-MM-DD" id="gift-date_expiry" class="form-control" />
+	    		<span class="input-group-btn">
+	    			<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+	    		</span>
+	    	</div>
+	    </div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="gift-category"><span data-toggle="tooltip" title="{{ help_gift_categories }}">{{ entry_categories }}</span></label>
+		<div class="col-sm-10">
+			<input type="text" name="category" value="" placeholder="{{ entry_categories }}" id="gift-category" class="form-control" />
+			<div id="gift-categories" class="well well-sm" style="height: 150px; overflow: auto;">
+			{% if categories %} 
+				{% for category in categories %} 
+				<div id="gift-categories-{{ category['category_id'] }}"><i class="fa fa-minus-circle"></i> {{ category['name'] }} 
+					<input type="hidden" name="categories[]" value="{{ category['category_id'] }}" />
+				</div>
+				{% endfor %} 
+			{% endif %} 
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="gift-product"><span data-toggle="tooltip" title="{{ help_gift_products }}">{{ entry_products }}</span></label>
+		<div class="col-sm-10">
+			<input type="text" name="product" value="" placeholder="{{ entry_products }}" id="gift-product" class="form-control" />
+			<div id="gift-products" class="well well-sm" style="height: 150px; overflow: auto;">
+			{% if products %} 
+				{% for product in products %} 
+				<div id="gift-products-{{ product['product_id'] }}"><i class="fa fa-minus-circle"></i> {{ product['name'] }} 
+					<input type="hidden" name="products[]" value="{{ product['product_id'] }}" />
+				</div>
+				{% endfor %} 
+			{% endif %} 
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript"><!--
+function saveGift() {
+	var 
+		$container = $('#gift-form'),
+		post_data = $container.find('input, select, textarea').serialize();
+	
+	$.ajax( {
+		url: '{{ action }}'.replace(/&amp;/g, '&'),
+		type: 'POST',
+		data: post_data,
+		dataType: 'html',
+		success: function (data, textStatus, jqXHR) {
+			if (data.match(/button\-gifts\-list\-filter/i)) {
+				$('#menu-gifts-list').tab('show');
+				$('#gifts-list').html(data);
+			} else {
+				$container.html(data);
+			}
+		}
+	} );
+}
+
+$(function() {
+	$('.date').datetimepicker( {pickTime: false} );
+	
+	// Categories
+	$('#gift-category').autocomplete( {
+		'source': function(request, response) {
+			$.ajax( {
+				url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+				dataType: 'json',
+				beforeSend: function () {},
+				complete: function () {},
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: item['name'],
+							value: item['category_id']
+						}
+					} ) );
+				}
+			} );
+		},
+		'select': function(item) {
+			this.value = '';
+			
+			$('#gift-categories-' + item['value']).remove();
+			
+			$('#gift-categories').append('<div id="gift-categories-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="categories[]" value="' + item['value'] + '" /></div>');
+		}	
+	} );
+
+	$('#gift-categories').delegate('.fa-minus-circle', 'click', function() {
+		$(this).parent().remove();
+	} );
+	
+	// Products
+	$('#gift-product').autocomplete( {
+		'source': function(request, response) {
+			$.ajax( {
+				url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+				dataType: 'json',
+				beforeSend: function () {},
+				complete: function () {},			
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: item['name'],
+							value: item['product_id']
+						}
+					} ) );
+				}
+			} );
+		},
+		'select': function(item) {
+			this.value = '';
+			
+			$('#gift-products-' + item['value']).remove();
+			
+			$('#gift-products').append('<div id="gift-products-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="products[]" value="' + item['value'] + '" /></div>');	
+		}
+	} );
+
+	$('#gift-products').delegate('.fa-minus-circle', 'click', function() {
+		$(this).parent().remove();
+	} );
+} );
+
+//--></script>

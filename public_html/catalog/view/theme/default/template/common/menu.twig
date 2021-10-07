@@ -1,0 +1,63 @@
+{% if categories %}
+
+<div class="mobile_menu_container">
+    <nav class="mobile_menu_content">
+        <ul>
+			{% for category in categories %}
+			{% if category.children %}
+            <li>
+                <a href="{{ category.href }}" class="parent">{{ category.name }} <i class="icon icon-angle-down"></i></a>
+				{% for children in category.children|batch(category.children|length / category.column|round(1, 'ceil')) %}
+                <ul class="drown">
+					<li class="backli"><a href="#" class="back"><i class="icon icon-angle-down"></i> Вернуться</a></li>
+					{% for child in children %}
+					<li><a href="{{ child.href }}">{{ child.name }}</a></li>
+					{% endfor %}
+                </ul>
+				{% endfor %}
+            </li>
+			
+			{% else %}
+			<li><a href="{{ category.href }}">{{ category.name }}</a></li>
+			{% endif %}
+			{% endfor %}
+            <li><a style="color: #fdc500;" class="blink" href="{{ special }}">Акции</a></li>
+            <li><a href="{{ manufacturer }}">Бренды</a></li>
+        </ul>
+    </nav>
+</div>
+<div class="mobile_menu_overlay"></div>
+{% endif %} 
+
+
+
+
+<script>
+if(document.documentElement.clientWidth < 768) {
+$(function() {
+    $(document).on("click", ".mobile_menu_container .parent", function(e) {
+        e.preventDefault();
+        $(".mobile_menu_container .activity").removeClass("activity");
+        $(this).siblings("ul").addClass("loaded").addClass("activity");
+    });
+    $(document).on("click", ".mobile_menu_container .back", function(e) {
+        e.preventDefault();
+        $(".mobile_menu_container .activity").removeClass("activity");
+        $(this).parent().parent().removeClass("loaded");
+        $(this).parent().parent().parent().parent().addClass("activity");
+    });
+    $(document).on("click", ".mobile_menu", function(e) {
+        e.preventDefault();
+        $(".mobile_menu_container").addClass("loaded");
+        $(".mobile_menu_overlay").fadeIn();
+    });
+    $(document).on("click", ".mobile_menu_overlay", function(e) {
+        $(".mobile_menu_container").removeClass("loaded");
+        $(this).fadeOut(function() {
+            $(".mobile_menu_container .loaded").removeClass("loaded");
+            $(".mobile_menu_container .activity").removeClass("activity");
+        });
+    });
+})
+}
+</script>

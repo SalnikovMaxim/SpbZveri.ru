@@ -1,0 +1,7 @@
+																&lt;p&gt;Вид животного: &lt;span class=&quot;font-weight-500&quot;&gt;Собаки&lt;/span&gt;&lt;/p&gt;
+																&lt;p&gt;Класс: &lt;span class=&quot;font-weight-500&quot;&gt;холистик&lt;/span&gt;&lt;/p&gt;
+																&lt;p&gt;Возраст: &lt;span class=&quot;font-weight-500&quot;&gt;для взрослых&lt;/span&gt;&lt;/p&gt;
+																&lt;p&gt;Ингредиент: &lt;span class=&quot;font-weight-500&quot;&gt;курица&lt;/span&gt;&lt;/p&gt;
+																&lt;p&gt;Порода: &lt;span class=&quot;font-weight-500&quot;&gt;для всех пород&lt;/span&gt;&lt;/p&gt;
+																&lt;p&gt;Вес: &lt;span class=&quot;font-weight-500&quot;&gt;1 кг&lt;/span&gt;&lt;/p&gt;
+															

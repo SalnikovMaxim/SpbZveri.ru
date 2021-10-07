@@ -1,0 +1,37 @@
+{{ header }}
+<div id="common-home">
+ {{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}{{ content_bottom }}</div>
+    {{ column_right }} 
+</div>
+
+<div class="pop-popup">
+	<div class="container">
+	<div class="row">
+		<div class="pop-left">
+			<img src="/image/magazines.jpg" alt="">
+		</div>
+		<div class="pop-right">
+			<h3>У нас отображен не весь ассортимент товаров</h3>
+			<p>Если вы не нашли нужный товар в каталоге, Вы всегда можете с нами связаться любым удобным способом и мы поможем вам найти товар для вашего домашнего питомца</p>
+			
+			<ul>
+										<li><a href="tel:+7 812 981 16 40"><i class="icon icon-phone"></i> +7 812 981 16 40</a></li>
+					<li><a href="malito:support@spbzveri.ru"><i class="icon icon-mail-alt"></i> support@spbzveri.ru</a></li>
+				 
+				</ul>
+				 
+				<button class="close-pop-popup" id="close-pop-popup" type="button">Перейти к товарам</button>
+		</div>
+		
+	</div>
+	</div>
+	</div>
+{{ footer }}

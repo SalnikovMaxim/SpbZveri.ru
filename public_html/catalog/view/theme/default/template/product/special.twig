@@ -1,0 +1,115 @@
+{{ header }}
+<div id="product-search" class="container">
+  <div itemscope="" itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+		<span itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem" class="breadcrumb-item">
+			{% if key + 1 < breadcrumbs|length %}
+			<a itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% else %}
+			<a rel="nofollow" itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% endif %}
+		</span>
+		{% endfor %}
+	</div>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+	{{ column_left }}
+    <div id="content" class="{{ class }}">{{ content_top }}
+       <h1 class="page-title">{{ heading_title }}</h1>
+      {% if products %}
+   
+		{% if products %}
+		  <div class="sort">
+            <label class="input-group-addon" for="input-sort">{{ text_sort }}</label>
+            <select id="input-sort" class="form-control" onchange="location = this.value;">
+              
+              
+              
+              {% for sorts in sorts %}
+              {% if sorts.value == '%s-%s'|format(sort, order) %}
+              
+              
+              
+              <option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+              
+              
+              
+              {% else %}
+              
+              
+              
+              <option value="{{ sorts.href }}">{{ sorts.text }}</option>
+              
+              
+              
+              {% endif %}
+              {% endfor %}
+            
+            
+            
+            </select>
+          </div>
+	 
+		<div class="row row-product-category">
+			{% for product in products %}
+				<div class="product-thumb-category cols-5">
+				  <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a>
+				  <span class="sale">-{{ product.skidka }}%</span>
+				  </div>
+					 
+				  <div class="caption">
+					<h4 class="product-name"><a href="{{ product.href }}">{{ product.name }}</a></h4>
+					{% if product.rating %}
+					<div class="rating">{% for i in 1..5 %}
+					  {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+					  {% endfor %}</div>
+					{% endif %}
+					  </div> 
+				  <div class="button-group">
+					{% if product.price %}
+					<div class="price"> 
+						{% if not product.special %}
+							{{ product.price }}
+						{% else %} 
+						<div class="price-old">{{ product.price }}</div> 
+						<div class="price-new">{{ product.special }}</div> 
+						{% endif %}
+					</div>
+					{% endif %}
+					 
+					 <div class="wishliscompare">
+						<button type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="icon icon-heart-empty"></i></button>
+						<button type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="icon icon-exchange"></i></button>
+					</div>
+					<button type="button" onclick="cart.add('{{ product.product_id }}');" class="product-button"><i class="icon icon-basket"></i></button>
+				   
+				  </div>
+				</div>
+			  {% endfor %}
+			   
+		</div>
+	{% endif %}
+		
+      <div class="pagination-block">{{ pagination }}</div>
+      {% else %}
+      <p>{{ text_empty }}</p>
+      <div class="buttons">
+        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+      </div>
+      {% endif %}
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

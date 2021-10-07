@@ -1,0 +1,66 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h4 class="panel-title"><a href="#collapse-membership" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">{{ heading_title }} <i class="fa fa-caret-down"></i></a></h4>
+	</div>
+	<div id="collapse-membership" class="panel-collapse collapse">
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="input-membership-card-code">{{ entry_card }}</label>
+				<div class="input-group">
+					<input type="text" name="membership_card" value="{{ membership_card }}" placeholder="{{ entry_card }}" id="input-membership-card-code" class="form-control" />
+					<span class="input-group-btn">
+						<button class="btn btn-primary" id="button-membership-card" data-loading-text="{{ text_loading }}" type="button">{{ button_card_applying }}</button>
+					</span>
+				</div>
+			</div>
+			{% if card_request %} 
+			<div class="form-group">
+				<label class="col-sm-2 control-label" for="input-membership-card-request">{{ entry_card_request }}</label>
+				<button class="btn btn-primary" id="button-membership-card-request" data-loading-text="{{ text_loading }}" type="button"><i class="fa fa-credit-card" aria-hidden="true"></i> <i class="fa fa-hand-o-left" aria-hidden="true"></i> {{ button_card_request }}</button>
+			</div>
+			{% endif %} 
+
+<script type="text/javascript"><!--
+$('#button-membership-card, #button-membership-card-request').on('click', function(e) {
+	var method, post_data;
+	
+	if (e.currentTarget.id == 'button-membership-card') {
+		method = 'card';
+		post_data = 'membership_card=' + encodeURIComponent($('input[name="membership_card"]').val());
+	} else if (e.currentTarget.id == 'button-membership-card-request') {
+		method = 'cardRequest';
+	}
+	
+	$.ajax({
+		url: 'index.php?route=extension/total/membership_card/' + method,
+		type: 'POST',
+		data: post_data,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.alert').remove();
+			//$('#' + e.currentTarget.id).button('loading');
+		},
+		complete: function() {
+			//$('#' + e.currentTarget.id).button('reset');
+		},
+		success: function(json) {
+			if (json['error']) {
+				$('.breadcrumb').after('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> ' + json['error'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+			
+			if (json['success']) {
+				$('.breadcrumb').after('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+			
+			$('html, body').animate({ scrollTop: 0 }, 'slow');
+
+			if (json['reload']) {
+				setTimeout(function() { location.reload(); }, 2000);
+			}
+		}
+	});
+});
+//--></script>
+		</div>
+	</div>
+</div>

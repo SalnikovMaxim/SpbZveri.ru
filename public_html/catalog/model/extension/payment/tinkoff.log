@@ -1,0 +1,12 @@
+[Wed Jun 30 06:38:06 2021] {"OrderId":"143","Amount":1499949,"DATA":{"Email":"kashpyrenkovasiliu@gmail.com","Connection_type":"opencart v3"}}
+[Wed Jun 30 06:38:06 2021] {"Success":false,"ErrorCode":"9999","Message":"Неверные параметры.","Details":"Терминал не найден."}
+[Wed Jun 30 06:38:43 2021] {"OrderId":"144","Amount":1499949,"DATA":{"Email":"kashpyrenkovasiliu@gmail.com","Connection_type":"opencart v3"}}
+[Wed Jun 30 06:38:43 2021] {"Success":false,"ErrorCode":"9999","Message":"Неверные параметры.","Details":"Терминал не найден."}
+[Wed Jun 30 09:47:34 2021] {"OrderId":"145","Amount":1534949,"DATA":{"Email":"kashpyrenkovasiliu@gmail.com","Connection_type":"opencart v3"}}
+[Wed Jun 30 09:47:34 2021] {"Success":false,"ErrorCode":"9999","Message":"Неверные параметры.","Details":"Терминал не найден."}
+[Wed Jun 30 13:28:17 2021] {"OrderId":"146","Amount":414220,"DATA":{"Email":"kashpyrenkovasiliu@gmail.com","Connection_type":"opencart v3"}}
+[Wed Jun 30 13:28:17 2021] {"Success":false,"ErrorCode":"9999","Message":"Неверные параметры.","Details":"Терминал не найден."}
+[Mon Jul 05 08:39:07 2021] {"OrderId":"147","Amount":189000,"DATA":{"Email":"snakeahead@gmail.com","Connection_type":"opencart v3"}}
+[Mon Jul 05 08:39:07 2021] {"Success":false,"ErrorCode":"9999","Message":"Неверные параметры.","Details":"Терминал не найден."}
+[Mon Jul 05 08:43:39 2021] {"OrderId":"148","Amount":179000,"DATA":{"Email":"snaleahead@gmail.com","Connection_type":"opencart v3"}}
+[Mon Jul 05 08:43:39 2021] {"Success":false,"ErrorCode":"9999","Message":"Неверные параметры.","Details":"Терминал не найден."}

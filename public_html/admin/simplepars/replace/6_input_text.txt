@@ -1,0 +1,12 @@
+&lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;
+&lt;a itemprop=&quot;item&quot; href=&quot;https://spbzoomagazin.ru/&quot;&gt;&lt;span itemprop=&quot;name&quot;&gt;Главная&lt;/span&gt;&lt;/a&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;1&quot; /&gt;
+&lt;/li&gt;
+&lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;
+&lt;a itemprop=&quot;item&quot; href=&quot;https://spbzoomagazin.ru/tovary-dlya-sobak/&quot;&gt;&lt;span itemprop=&quot;name&quot;&gt;Для собак&lt;/span&gt;&lt;/a&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;2&quot; /&gt;
+&lt;/li&gt;
+&lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;
+&lt;a itemprop=&quot;item&quot; href=&quot;https://spbzoomagazin.ru/tovary-dlya-sobak/korma-dlya-sobak/&quot;&gt;&lt;span itemprop=&quot;name&quot;&gt;Корма&lt;/span&gt;&lt;/a&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;3&quot; /&gt;
+&lt;/li&gt;
+&lt;li itemprop=&quot;itemListElement&quot; itemscope itemtype=&quot;https://schema.org/ListItem&quot;&gt;
+&lt;span itemprop=&quot;name&quot; class=&quot;color_999&quot;&gt;German Shepherd puppy 30&lt;/span&gt;&lt;meta itemprop=&quot;position&quot; content=&quot;4&quot; /&gt;
+&lt;/li&gt;

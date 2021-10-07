@@ -1,0 +1,12 @@
+<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+<meta itemprop="position" content="1" />
+</li>
+<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+<a itemprop="item" href="https://spbzoomagazin.ru/tovary-dlya-sobak/"><span itemprop="name">Для собак</span></a><meta itemprop="position" content="2" />
+</li>
+<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+<a itemprop="item" href="https://spbzoomagazin.ru/tovary-dlya-sobak/korma-dlya-sobak/"><span itemprop="name">Корма</span></a><meta itemprop="position" content="3" />
+</li>
+<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+<span itemprop="name" class="color_999">German Shepherd puppy 30</span><meta itemprop="position" content="4" />
+</li>

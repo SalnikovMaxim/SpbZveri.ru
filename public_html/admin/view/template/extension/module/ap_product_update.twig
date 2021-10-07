@@ -1,0 +1,422 @@
+{{ header }}
+	{{ column_left }}
+
+<div id="content">
+	
+	<div class="page-header">
+    	<div class="container-fluid">
+      		<div class="pull-right">
+        		<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+        	</div>
+      			
+      		 <ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			  </ul>
+    	</div> <!-- container-fluid -->
+  	</div> <!-- page-header -->
+
+  	<div class="container-fluid">
+ 
+			{% if success %}
+			<div class="alert alert-success">
+				<i class="fa fa-exclamation-circle"></i> {{ success }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+			{% endif %}
+
+			{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+			{% endif %}
+
+		<div class="panel panel-default settings-wrap">
+			<div class="panel-body">
+
+				<h3>{{ text_pr_settings }}</h3>
+					
+				<form action="{{ action_settings }}" method="post" enctype="multipart/form-data" id="form-settings" class="form-horizontal">
+							
+					<h4>{{ text_pars_col }}</h4>
+					
+					{% if error_upc_sku %}<div class="alert alert-danger" role="alert">{{ error_upc_sku }}</div>{% endif %}
+					{% if error_quantity_price %}<div class="alert alert-danger" role="alert">{{ error_quantity_price }}</div>{% endif %}
+					{% if error_sku %}<div class="alert alert-danger" role="alert">{{ error_sku }}</div>{% endif %}
+				 
+					<div class="input-group">
+						<span class="input-group-addon" id="sku">{{ text_sku_col }}</span>
+						<input value="{{ sku }}" type="text" class="form-control" placeholder="sku" aria-describedby="sku" name="module_ap_product_update[sku]">
+					</div>
+
+					<br>
+ 
+					{% if error_upc %}<div class="alert alert-danger" role="alert">{{ error_upc }}</div>{% endif %}
+
+					<div class="input-group">
+						<span class="input-group-addon" id="upc">{{ text_upc_col }}</span>
+						<input value="{{ upc }}" type="text" class="form-control" placeholder="upc" aria-describedby="upc" name="module_ap_product_update[upc]">
+					</div>
+
+					<br>
+  
+					{% if error_price %}<div class="alert alert-danger" role="alert">{{ error_price }}</div>{% endif %}
+
+					<div class="input-group">
+						<span class="input-group-addon" id="price">{{ text_price_col }}</span>
+						<input value="{{ price }}" type="text" class="form-control" placeholder="price" aria-describedby="price" name="module_ap_product_update[price]">
+					</div>
+
+					<br>
+   
+					{% if error_quantity %}<div class="alert alert-danger" role="alert">{{ error_quantity }}</div>{% endif %}
+
+					<div class="input-group">
+						<span class="input-group-addon" id="quantity">{{ text_quant_col }}</span>
+						<input value="{{ quantity }}" type="text" class="form-control" placeholder="quantity" aria-describedby="quantity" name="module_ap_product_update[quantity]">
+					</div>
+						
+					<br>
+
+					<h4>{{ text_z_pars }}</h4>
+ 
+					{% if error_start_column %}<div class="alert alert-danger" role="alert">{{ error_start_column }}</div>{% endif %}
+
+					<div class="input-group">
+						<span class="input-group-addon" id="start_column">{{ text_z_start }}</span>
+						<input value="{{ start_column }}" type="text" class="form-control" placeholder="start column" aria-describedby="start_column" name="module_ap_product_update[start_column]">
+					</div>	
+
+					<br>
+ 
+					{% if error_stop_column %}<div class="alert alert-danger" role="alert">{{ error_stop_column }}</div>{% endif %}
+
+					<div class="input-group">
+						<span class="input-group-addon" id="stop_column">{{ text_z_stop }}</span>
+						<input value="{{ stop_column }}" type="text" class="form-control" placeholder="stop column" aria-describedby="stop_column" name="module_ap_product_update[stop_column]">
+					</div>
+
+					<br>
+
+					<button class="btn btn-primary" type="submit" form="form-settings"><i class="fa fa-floppy-o" aria-hidden="true"></i> Сохранить настройки</button>
+
+				</form>
+
+			</div> <!-- panel-body -->
+		</div> <!-- panel -->
+
+		<div class="panel panel-default update-wrap">
+			<div class="panel-body">
+
+				<h4>{{ text_upl }}</h4>
+
+				<form action="{{ action_upload }}" method="post" enctype="multipart/form-data" id="form-upldate" class="form-horizontal">
+					<label class="btn btn-primary" for="file">
+						<input style="display:none" type="file" name="file" id="file">
+						<i class="fa fa-cloud-upload" aria-hidden="true"></i>
+					</label>
+
+					<button type="button" onClick="tool.download(); return false;" class="btn btn-primary">{{ text_upl_start }}</button>
+				</form>
+
+				<div class="progres-wraper">
+
+					<div class="upl-wrap fade">	
+						<h5>{{ text_upd }}</h5>
+						<div id="progressbar-upl" class="progress">
+							<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>
+					</div>
+
+					<div class="upd-wrap fade">	
+						<h5>{{ text_upd_statr }}</h5>
+						<div id="progressbar-upd" class="progress">
+							<div style="width:.5%" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+						</div>	
+					</div>				
+
+				</div> <!-- status -->
+				
+				<div class="report fade">
+					<table class="table table-condensed">
+						<tr class="top">
+							<th>#</th>
+							<th>{{ column_sku }}</th>
+							<th>{{ column_upc }}</th>
+							<th>{{ column_name }}</th>
+							<th>{{ column_quantity }}</th>
+							<th>{{ column_price }}</th>
+							<th>{{ column_status }}</th>
+						</tr>
+					</table>
+				</div> <!-- report -->
+			</div> <!-- panel-body -->
+		</div> <!-- panel -->
+			
+		<div class="panel panel-default download-wrap">
+			<div class="panel-body">			
+				
+				<h3>{{ text_dwl }}</h3>
+
+				<form action="{{ action_download }}" method="post" enctype="multipart/form-data" id="form-download" class="form-horizontal">
+					<h4>{{ text_dwl_param }}</h4>
+
+					<div class="input-group">
+						<span class="input-group-addon" id="quantity">{{ text_manuf }} </span>
+						<select class="form-control" name="manufacturer_id">
+							<option value="all">{{ text_all }}</option>
+							{% for manufacture in manufacturer %}
+							<option value="{{ manufacture.manufacturer_id }}" >{{ manufacture.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon" id="quantity">{{ text_categ }} </span>
+						<select class="form-control" name="category_id">
+							<option value="all">{{ text_all }}</option>
+							{% for category in categories %}
+							<option value="{{ category.category_id }}" >{{ category.name }}</option>
+							{% endfor %}
+						</select>
+					</div>	
+								
+					<br>
+
+					<h4>{{ text_sort }}</h4>
+
+					<div class="input-group">
+						<span class="input-group-addon" id="quantity">{{ text_s_item }}</span>
+						<select class="form-control" name="sort">
+							<option value="pd.name">{{ text_s_name }}</option>
+							<option value="p.model">{{ text_s_model }}</option>
+							<option value="p.quantity">{{ text_s_q }}</option>
+							<option value="p.price">{{ text_s_pr }}</option>
+							<option value="p.sku">SKU (Артикул)</option>
+							<option value="p.upc">UPC</option>
+							<option value="p.manufacturer_id">{{ text_manuf }}</option>
+						</select>
+					</div>	
+							
+					<br>
+
+					<div class="input-group">
+						<span class="input-group-addon" id="quantity">{{ text_order }} </span>
+						<select class="form-control" name="order">
+							<option value="ASC"> {{ text_asc }} </option>
+							<option value="DESC"> {{ text_desc }} </option>
+						</select>
+					</div>
+
+					<br>
+
+					<button class="btn btn-primary"><i class="fa fa-cloud-download" aria-hidden="true"></i> Выгрузить товары</button>	
+				</form>
+
+			</div> <!-- panel-body -->
+		</div> <!-- panel -->
+			
+
+	</div> <!-- container-fluid -->
+
+</div><!-- content -->	
+
+<style>
+	.file-name {margin: 15px 0;}
+	.upl-wrap, .upd-wrap {margin-top: 15px;}
+	.fade:not(.in) {visibility: hidden; height: 0; margin: 0; overflow: hidden;}	
+	.report {max-height: 500px; overflow:auto; border:3px solid #F0F0F0; border-radius:2px; margin: 15px 0;}
+	.panel-default { border: 1px solid #eee; border-radius: 2px; }
+	.table { margin-bottom: 0; }
+	.table > tbody > tr > th { border-top: none; }
+	.input-group { width: 100%; }
+	.input-group-addon { width: 220px; text-align: left; }
+	.not-found {background: #FF9A9A;}
+	.not-found td {border-top: 1px solid #FF8282 !important; color: #555;}
+	.duble {background: #86B2CA;}
+	.duble td {border-top: 1px solid #78ADCA !important; color: #f9f9f9;}
+	.not-found-sku-upc {background: #eee;}
+</style>
+
+<script>
+
+	$('#file').on('change', function () {
+		var file_name = $(this).val().replace( "C:\\fakepath\\", '' );
+		var html;
+
+		$('.file-name').remove();
+
+		html = "<div class='file-name alert alert-info' role='alert'>"+ file_name +" <a class='pull-right	' href='javascript:void(0);' onClick='$(\"#file\").val(\"\"); $(\".file-name\").remove();  return false;'> <i class='fa fa-trash'></i> </a> </div>";
+
+		$('#form-upldate').append(html);
+
+	});
+
+	var tool = {
+		'download' : function () 
+		{
+			var form = $('#form-upldate');
+			$('.upl-wrap').addClass('in');
+			$('.report tr:not(.top)').remove();
+			$('.alert-danger').remove();
+			$('.report').removeClass('in');
+
+			$.ajax({
+				data: new FormData(form.get(0)),
+				dataType: 'json',
+				method:'POST',
+				url: form.attr('action'),
+				contentType: false, 
+				processData: false,
+
+				success: function (json, textStatus) 
+				{
+					if (json['error']) {
+						var html = '<div class="alert alert-danger" role="alert">'+ json['error'] +'</div>';
+						form.before(html); 
+					}
+
+					if (json['file_status']){
+						tool.addPacket();
+						
+						$('.upd-wrap').addClass('in');
+					}
+				},
+
+				xhr: function()
+				{
+        			
+        			var xhr = $.ajaxSettings.xhr(); // получаем объект XMLHttpRequest
+        			
+        			xhr.upload.addEventListener('progress', function(evt){ // добавляем обработчик события progress (onprogress)
+          			
+          				if (evt.lengthComputable) { 
+            				var percentComplete = Math.ceil((evt.loaded * 100) / evt.total);
+
+            				$('#progressbar-upl').children().css('width', percentComplete + '%');
+
+            				if (percentComplete >= 100) {
+            					setTimeout(function () {
+            						$('.upl-wrap').removeClass('in');
+            						$('#progressbar-upl').children().removeAttr('style');
+            					}, 1500);
+            				}
+       				 	}
+    				}, false);
+        			
+        			return xhr;
+    			},
+
+				complete: function (xhr, textStatus) 
+				{
+					//console.log(textStatus);
+				},
+
+				error: function(xhr, ajaxOptions, thrownError) 
+				{
+					console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+
+			});
+
+			return false;
+		},
+
+		'addPacket' : function () 
+		{
+			
+
+			$.ajax({
+				dataType: 'json',
+				method:'POST',
+				url:'{{ action_update }}',
+				timeout: 50000,
+				success: function (json, textStatus) 
+				{
+
+					var html = '';
+
+					if (!json['error']) {
+
+						var percentComplete = Math.ceil( (json['next_step'] * 100) / json['total_rows'] );
+	            		$('#progressbar-upd').children().css('width', percentComplete + '%');
+
+	            		if (percentComplete >= 100) {
+	            			setTimeout(function () {
+	            				$('.upd-wrap').removeClass('in');
+	            				$('#progressbar-upd').children().removeAttr('style');
+	            			}, 1500);
+	            		}            		
+
+						if (!json['status']) {
+	            			tool.addPacket(); 	
+						} else {
+							$('#file').val('');
+							$('.file-name').remove();
+						}
+
+						if (json['report']) {
+							
+							for (var key in json['report']) {
+								
+	            				html += '<tr class="'+ json['report'][key]['class'] +'">';
+	            				html += 	'<td> #'+ json['report'][key]['row']      +'</td>';
+	            				html += 	'<td>'  + json['report'][key]['sku']      +'</td>';
+	            				html += 	'<td>'  + json['report'][key]['upc']      +'</td>';
+	            				html += 	'<td>'  + json['report'][key]['name']     +'</td>';
+	            				html += 	'<td>'  + json['report'][key]['quantity'] +'</td>';
+	            				html += 	'<td>'  + json['report'][key]['price']    +'</td>';
+	            				html += 	'<td>'  + json['report'][key]['status']   +'</td>';
+	            				html += '<tr>'; 
+	            			}
+
+	            			$('.report').addClass('in');
+							$('.report table').append(html);
+						}
+
+					} else {
+						$('.upd-wrap').removeClass('in');
+ 
+						if (json['error']['upc_sku'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['upc_sku'] +'</div>';
+						if (json['error']['quantity_price'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['quantity_price'] +'</div>';
+						if (json['error']['name'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['name'] +'</div>';
+						if (json['error']['sku'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['sku'] +'</div>';
+						if (json['error']['upc'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['upc'] +'</div>';
+						if (json['error']['price'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['price'] +'</div>';
+						if (json['error']['quantity'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['quantity'] +'</div>';
+						if (json['error']['start_column'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['start_column'] +'</div>';
+						if (json['error']['stop_column'])
+							html += '<div class="alert alert-danger" role="alert">'+ json['error']['stop_column'] +'</div>';
+ 
+						$('#form-upldate').append(html);
+					}
+
+				},
+
+				/*complete: function (xhr, textStatus) 
+				{
+					onsole.log('success' +"\n\r"+ textStatus);
+				},*/
+
+				error: function(xhr, ajaxOptions, thrownError) 
+				{
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+
+			});
+		}
+	};
+
+</script>
+{{ footer }}

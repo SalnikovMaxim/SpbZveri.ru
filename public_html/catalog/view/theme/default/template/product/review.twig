@@ -1,0 +1,18 @@
+{% if reviews %}
+<hr>
+<h4>Все отзывы о товаре</h4>
+{% set itemrew = 1 %}
+{% for review in reviews %}
+<div class="review-item">
+	<p class="review-autor">{{ review.author }}</p>
+	<p class="review-rating">{% for i in 1..5 %}{% if review.rating < i %}<span class="not-activer">&#9734;</span>{% else %}<span class="activer">&#9733;</span>{% endif %}{% endfor %}</p>
+	<p class="review-text">{{ review.text }}</p>
+	<p class="review-date-added">{{ review.date_added }}</p>
+	<span class="number-rew">{{ itemrew }}</span>
+</div>
+{% set itemrew = itemrew + 1 %}
+{% endfor %}
+<div class="row">
+  <div class="col-sm-6 text-left">{{ pagination }}</div>
+</div>
+{% endif %}

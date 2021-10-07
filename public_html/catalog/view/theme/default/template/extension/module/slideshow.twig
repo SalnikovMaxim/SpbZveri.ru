@@ -1,0 +1,28 @@
+<div class="container">
+	<div class="slider">
+		{% for banner in banners %}
+			<div class="slider-item">
+			{% if banner.link %}
+			<a href="{{ banner.link }}">
+				<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
+			</a>
+			{% else %}
+			<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
+			{% endif %}
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		$('.slider').bxSlider({
+		    touchEnabled: false,
+		    pager: true,
+		    controls: false,
+		    auto: true,
+		    pause: 10000,
+		    slideWidth: 1100
+	    });
+	});
+</script>

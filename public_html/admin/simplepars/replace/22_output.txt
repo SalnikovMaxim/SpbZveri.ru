@@ -1,0 +1,1 @@
+Вид животного{csvnc}Собаки{csvnc}Класс{csvnc}холистик{csvnc}Возраст{csvnc}для взрослых{csvnc}Ингредиент{csvnc}курица{csvnc}Порода{csvnc}для всех пород{csvnc}Вес{csvnc}1 кг{csvnc}

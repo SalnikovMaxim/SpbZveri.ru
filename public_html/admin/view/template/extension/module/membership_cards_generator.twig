@@ -1,0 +1,138 @@
+<div class="alert alert-info" role="alert">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+  	<p><i class="fa fa-info-circle" aria-hidden="true"></i> {{ text_card_generator }}</p>
+</div>
+<div class="row">
+	<div class="col-sm-6">
+		<label class="control-label" for="generator-code_list">{{ entry_code }}</label>
+		<textarea name="code_list" rows="13" id="generator-code_list" class="form-control"></textarea>
+	</div>
+	<div class="col-sm-6">
+		<div class="form-group">
+	      	<label class="col-sm-3 control-label" for="generator-generation_mode">{{ entry_generation_mode }}</label>
+	      	<div class="col-sm-9">
+	      		<select name="generation_mode" id="generator-generation_mode" class="form-control">
+	      		{% for k,v in generation_mode %} 
+					<option value="{{ k }}">{{ v }}</option>
+	      		{% endfor %} 
+	      		</select>
+	      	</div>
+	    </div>
+	    <div class="form-group">
+			<label class="col-sm-3 control-label" for="generator-quantity">{{ entry_quantity }}</label>
+			<div class="col-sm-9">
+				<input type="text" name="quantity" value="" placeholder="{{ entry_quantity }}" id="generator-quantity" class="form-control" />
+			</div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+			<button type="button" class="btn btn-primary btn-lg btn-block" id="button-generate">{{ button_generate }}</button>
+			</div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+				<button type="button" class="btn btn-primary btn-lg btn-block" id="button-save" width="100%">{{ button_save }}</button>
+			</div>
+        </div>
+	</div>
+</div>
+<script type="text/javascript"><!--
+$(function() {
+	$('#generator-generation_mode').on('change', function (e) { 
+		if (e.target.value != 'free_cards') {
+			$.ajax( {
+				url: 'index.php?route=extension/module/membership/getTotalCustomers&user_token={{ user_token }}',
+			   	type: 'POST',
+			   	data: 'generation_mode=' + e.target.value,
+			   	dataType: 'json',
+			  	success: function(json) {
+			  		if (typeof json['total'] != 'undefined') {
+			  			$('#generator-quantity').val(json['total']);
+					}
+			   	}
+			} );
+		}
+	} );
+	
+	$('#generator-code_list').on('change', function (e) { 
+		var array = this.value.split('\n');
+		
+		if (array.length == 1 && !array[0]) {
+			$('#generator-quantity').val(0);
+		} else {
+			$('#generator-quantity').val(array.length);
+		}
+	} );
+	
+	$('#button-generate, #button-save').on('click', function () { 
+		var 
+			action,
+			$button = $(this),
+			post_data = $('#cards-generator').find('input, select, textarea').serialize();
+		
+		if (this.id == 'button-generate') {
+			action = 'getCardCode';
+		} else if (this.id == 'button-save') {
+			action = 'saveCardsFromGenerator';
+		}
+
+		$.ajax( {
+			url: 'index.php?route=extension/module/membership/' + action  + '&user_token={{ user_token }}',
+		   	type: 'POST',
+		   	data: post_data,
+		   	dataType: 'json',
+		   	beforeSend: function() {	   		
+		   		$button.prepend('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>').addClass('disabled');
+		   	},
+		    complete: function(){
+		    	setTimeout(function() { $('.alert-success').fadeOut() }, 5000);
+		    	
+				$button.removeClass('disabled').find('i.fa-spin').remove();
+			},
+		  	success: function(json) {
+		  		if (json['code_list'] instanceof Array) {
+		  			var list = '';
+		  			
+					for(var i in json['code_list']) {
+						if (i > 0) {
+							list += '\n';
+						}			
+						
+						list += json['code_list'][i];
+					}
+					
+					$('#generator-code_list').val(list).trigger('change');
+				}
+				
+				if (json['used_code'] instanceof Array) {
+					var list = $('#generator-code_list').val();
+
+					for(var i in json['used_code']) {
+						list = list.replace(new RegExp(json['used_code'][i] + '\n*', 'ig'), '');
+					}
+					
+					$('#generator-code_list').val(list).trigger('change');
+					
+					var left = list.split('\n');
+
+					if (left.length > 0 && left[0] != list) {
+						setTimeout(function() { $('#button-save').trigger('click') }, 100);
+					}
+				}
+				
+				if (json['error_code'] instanceof Array) {
+					for(var i in json['error_code']) {
+						$('.container-fluid:eq(1)').prepend('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_card_saving }} ' + json['error_code'][i] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+					}
+				}
+				
+				if (json['success']) {
+	    			$('.container-fluid:eq(1)').prepend('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+	    			
+	    			$('html, body').animate({ scrollTop: 0 }, 'slow');
+	    		}
+		   	}
+		} );
+	} );
+} );
+//--></script>

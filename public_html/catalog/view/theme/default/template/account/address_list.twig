@@ -1,0 +1,67 @@
+{{ header }}
+<div id="account-address" class="container">
+  <div itemscope="" itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+		<span itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem" class="breadcrumb-item">
+			{% if key + 1 < breadcrumbs|length %}
+			<a itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% else %}
+			<a rel="nofollow" itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% endif %}
+		</span>
+		{% endfor %}
+	</div>
+  {% if success %}
+  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  {% if error_warning %}
+  <div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}
+{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+	  <h1 class="page-title">{{ text_address_book }}</h1>
+      {% if addresses %}
+      <div class="row">
+		{% set i = 1 %}
+		{% for result in addresses %}
+		<div class="adress-item">
+			<form action="{{ result.delete }}" method="post" enctype="multipart/form-data" id="form-address-{{ result.address_id }}">
+				<div class="adress-item-tit">
+					<div class="adrestitle"><i class="icon icon-"></i> Адрес {{ i }}</div>
+					<p>{{ result.address }}</p>
+				</div>
+				<div class="adress-item-but">
+					<a href="{{ result.update }}" class="btn btn-info">{{ button_edit }}</a>
+					<a href = "{{ result.delete }}" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="return confirm('{{ text_confirm }}')">{{ button_delete }}</a>
+				</div>
+			</form>
+		</div>
+		{% set i = i + 1 %}
+		{% endfor %}
+   
+      </div>
+      {% else %}
+      <p>{{ text_empty }}</p>
+      {% endif %}
+      
+      <div class="buttons clearfix">
+        <div class="pull-left"><a href="{{ back }}" class="btn btn-default">{{ button_back }}</a></div>
+        <div class="pull-right"><a href="{{ add }}" class="btn btn-primary">{{ button_new_address }}</a></div>
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}
+</div>
+{{ footer }}

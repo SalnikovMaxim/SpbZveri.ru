@@ -1,0 +1,154 @@
+{{ header }}
+<div id="account-account" class="container">
+  <div itemscope="" itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+		<span itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem" class="breadcrumb-item">
+			{% if key + 1 < breadcrumbs|length %}
+			<a itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% else %}
+			<a rel="nofollow" itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% endif %}
+		</span>
+		{% endfor %}
+	</div>
+  {% if success %}
+  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+ 
+	<h1 class="page-title">{{ text_my_account }}</h1>
+	<div class="account">
+		<div class="row">
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-heart-empty"></i></div>
+				<div class="account-item-title">Избранные товары</div>
+				<div class="account-item-button"><span><strong>{{ text_wishlist }}</strong> товара</span><a href="{{ wishlist }}">Посмотреть</a></div>
+			</div>
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-exchange"></i></div>
+				<div class="account-item-title">Товары в сравнении</div>
+				<div class="account-item-button"><span><strong>{{ count_compare }}</strong> товара</span><a href="{{ compare }}">Посмотреть</a></div>
+			</div>
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-basket"></i></div>
+				<div class="account-item-title">Ваша корзина</div>
+				<div class="account-item-button"><span><strong>{{ text_items }}</strong> товара</span><a href="{{ checkout }}">Оформить</a></div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="account">
+		<div class="account-h2">Контактная информация и пароли</div>
+		<div class="row">
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-user"></i></div>
+				<div class="account-item-title">Контактные данные</div>
+				<div class="account-item-button"><a href="{{ edit }}" style="margin-left: auto;">Изменить</a></div>
+			</div>
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-key"></i></div>
+				<div class="account-item-title">Мои пароли</div>
+				<div class="account-item-button"><a href="{{ password }}" style="margin-left: auto;">Изменить</a></div>
+			</div>
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-location-1"></i></div>
+				<div class="account-item-title">Мои адреса</div>
+				<div class="account-item-button"><a href="{{ address }}" style="margin-left: auto;">Изменить</a></div>
+			</div>
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-history"></i></div>
+				<div class="account-item-title">История заказов</div>
+				<div class="account-item-button"><a href="{{ order }}" style="margin-left: auto;">Посмотреть</a></div>
+			</div>
+			{#
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-cc-diners-club"></i></div>
+				<div class="account-item-title">Транзакции</div>
+				<div class="account-item-button"><a href="{{ transaction }}" style="margin-left: auto;">Посмотреть</a></div>
+			</div>
+			#}
+		</div>
+	</div>
+	
+	<div class="account">
+		<div class="account-h2">Скидка и подписка на новости</div>
+		<div class="row">
+			{% if membership %}
+			<div class="account-item account-itemact">
+				<div class="account-item-icon"><i class="icon icon-cc-diners-club"></i></div>
+				<div class="account-item-title">{{ text_membership }}</div>
+				<div class="account-item-button"><span>Скидка - <strong>{{ card_discount }}</strong></span><a href="{{ membership }}">Посмотреть</a></div>
+			</div>
+			{% endif %}
+			<div class="account-item">
+				<div class="account-item-icon"><i class="icon icon-mail-alt"></i></div>
+				<div class="account-item-title">Подписка на рассылку</div>
+				<div class="account-item-button"><a href="{{ newsletter }}" style="margin-left: auto;">Изменить</a></div>
+			</div>
+		</div>
+	</div>
+ 
+{#
+<div class="row">
+  {{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+	  <h1 class="page-title">{{ text_my_account }}</h1>
+      <ul class="list-unstyled">
+		{% if membership %}
+		<li><a href="{{ membership }}"><i class="fa fa-credit-card" aria-hidden="true"></i> {{ text_membership }}</a></li>
+		{% endif %}
+		<!-- Membership -->
+        <li><a href="{{ edit }}">{{ text_edit }}</a></li>
+        <li><a href="{{ password }}">{{ text_password }}</a></li>
+        <li><a href="{{ address }}">{{ text_address }}</a></li>
+        <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
+      </ul>
+      {% if credit_cards %}
+      <h2>{{ text_credit_card }}</h2>
+      <ul class="list-unstyled">
+        {% for credit_card in credit_cards %}
+        <li><a href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <h2>{{ text_my_orders }}</h2>
+      <ul class="list-unstyled">
+        <li><a href="{{ order }}">{{ text_order }}</a></li>
+        <li><a href="{{ download }}">{{ text_download }}</a></li>
+        {% if reward %}
+        <li><a href="{{ reward }}">{{ text_reward }}</a></li>
+        {% endif %}
+        <li><a href="{{ return }}">{{ text_return }}</a></li>
+        <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>
+        <li><a href="{{ recurring }}">{{ text_recurring }}</a></li>
+      </ul>
+      <h2>{{ text_my_affiliate }}</h2>
+      <ul class="list-unstyled">
+        {% if not tracking %}
+        <li><a href="{{ affiliate }}">{{ text_affiliate_add }}</a></li>
+        {% else %}
+        <li><a href="{{ affiliate }}">{{ text_affiliate_edit }}</a></li>
+        <li><a href="{{ tracking }}">{{ text_tracking }}</a></li>
+        {% endif %}
+      </ul>
+      <h2>{{ text_my_newsletter }}</h2>
+      <ul class="list-unstyled">
+        <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
+      </ul>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+#}
+</div>
+{{ footer }}

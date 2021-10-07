@@ -1,0 +1,236 @@
+{% if subscribers %}
+
+<div class="container">
+  <div class="box-subscribers">
+	 <form action="" method="post" class="form-inline" class="subscribers">
+		<div class="subscribers">
+		   <div class="subscribers-col-one">
+			  <span>%</span>
+		   </div>
+		   <div class="subscribers-col-two">
+			  <p>{{ subscribers_title }}</p>
+		   </div>
+		   <span class="blockfdg"></span>
+		   <div class="subscribers-col-tre">
+				<input type="email" name="txtemail" id="txtemail" value="" placeholder="E-mail" class="form-control input-lg" /> 
+				<button type="submit" id="subscribe" class="btn btn-subscribers" onclick="return Subscribe();" disabled="disabled">Хочу!</button>
+		   </div>
+		</div>
+	 </form>
+  </div>
+</div>
+
+ 
+<div class="subscribers-success-pupup subscribers-tahf-pupup">
+	<div class="subscribers-success">
+		<div class="subscribers-success-bodys">
+			<span class="exit" id="exit-popup"><i class="icon icon-cancel"></i></span>
+			<div class="sheader">
+				Вы успешно подписались на рассылку новостей!
+			</div>
+			<div class="sbody">
+				<div class="sbody-body">
+					<div class="sbody-body-item">
+						<i class="icon icon-ok-1"></i>
+						<span>Создан Ваш личный кабинет</span>
+						<div class="account-login">Логин и пароль: <span id="account-login"></span></div>
+						<div class="preim"><a href="">Преимущества личного кабинета</a></div>
+					</div>
+					<div class="sbody-body-item">
+						<i class="icon icon-ok-1"></i><span>Скидка на первый заказ</span>
+						<ul class="sbody-body-ul">
+							<li class=""><strong>- 100 руб</strong><span>при сумме заказа до 2 999 руб.</span></li>
+							<li class=""><strong>- 200 руб</strong><span>при сумме заказа от 3 000 руб.</span></li>
+						</ul>
+						<div class="preim"><a href="">Подробнее о скидках</a></div>
+					</div>
+				</div>
+			</div>
+			<div class="sfooter">
+				<button type="button" class="btn btn-auting" onclick="location.href = '{{ login }}'">Авторизоваться и активировать скидку</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="subscribers-success-pupup subscribers-made-pupup">
+	<div class="subscribers-success">
+		<div class="subscribers-success-bodys">
+			<span class="exit exit-popup"><i class="icon icon-cancel"></i></span>
+			<div class="sheader">
+				Вы уже подписаны на рассылку!
+			</div>
+			<div class="sbody">
+				<div class="sbody-body">
+					<div class="sbody-body-item">
+						<i class="icon icon-ok-1"></i><span>У вас есть личный кабинет</span>
+						<div class="account-login">Ваш логин: <span id="account-login-made"></span></div>
+						<div class="preim">Коротко о преимуществах в личном кабинете:</div>
+						<ul class="sbody-body-ul">
+							<li class="">- вы участник <strong>накопительной</strong> бонусной программы лояльности</li>
+							<li class="">- вы получаете персональные <strong>скидки</strong></li>
+						</ul>
+						<div class="preim"><a href="">Подробнее о преимуществах личного кабинета</a></div>
+					</div>
+				</div>
+			</div>
+			<div class="sfooter">
+				<button type="button" class="btn btn-auting" onclick="location.href = '{{ login }}'">Авторизоваться в личном кабинете</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="overflow-popup"></div>
+ 
+<script>
+    function Subscribe() {
+        var emailpattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}(.[a-zA-Z]{2})?$/;
+        var email = $('#txtemail').val();     
+
+        if(email != "") {
+            if(emailpattern.test(email)){
+                $.ajax({
+                    type: 'POST',
+                    url: 'index.php?route=common/footer/newSubscribe',
+                    dataType: 'json',
+                    data: {email: $('#txtemail').val()},
+                    success: function(json){
+						if(json.message == 'Уже подписаны!') {
+							$('#overflow-popup').fadeIn(297, function(){
+								$('.subscribers-made-pupup').css('display', 'block').animate({opacity: 1}, 198);
+							});
+							
+							$('#account-login-made').html(email);
+						} else if(json.message == 'Подписка успешно оформлена!') {
+							$('#overflow-popup').fadeIn(297, function(){
+								$('.subscribers-tahf-pupup').css('display', 'block').animate({opacity: 1}, 198);
+							});
+							
+							$('#account-login').html(email);
+						} else {
+							alert('Что-то пошло не так. Попробуйте еще раз!');
+						}
+					}
+                });
+                $('#txtemail').val('');
+                return false;
+            }else{
+                alert("{{ text_invalid_email }}");
+                return false;
+            }
+        } else {
+            alert("{{ text_email_require }}");
+            $(email).focus();
+            return false;
+        }
+    }
+
+	$("#txtemail").keyup(function () {
+		if ($(this).val()) {
+			$('#subscribe').removeAttr('disabled');
+		}
+		else {
+			$('#subscribe').attr('disabled', 'disabled'); 
+		}
+	});
+ 
+ 
+
+  $('.exit').click( function(){
+    $('#overflow-popup').fadeOut(297)
+      $('.subscribers-success-pupup').fadeOut(297);
+  });
+ 
+</script>
+{% endif %}
+</main>
+ 
+ 
+
+ 
+
+
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-contact">
+				<h4>Контакты</h4>
+				<ul>
+					<li><a href="{{ contact }}"><i class="icon icon-right-dir"></i> {{ text_contact }}</a></li>
+					{% for information in informationstop %}
+					<li><a href="{{ information.href }}"><i class="icon icon-paw"></i> {{ information.title }}</a></li>
+					{% endfor %}
+					<li><a href="tel:{{ telephone }}"><i class="icon icon-phone"></i> {{ telephone }}</a></li>
+					<li><a href="malito:{{ email }}"><i class="icon icon-mail-alt"></i> {{ email }}</a></li>
+					<li><a href="#"><i class="icon icon-location-1"></i> {{ address }}</a></li>
+					<li>{{ comment }}</li>
+				</ul>
+			</div>
+			
+			<div class="col-information">
+				<h4>Информация</h4>
+				<ul>
+					<li><i class="icon icon-right-dir"></i> <a href="{{ login }}">Вход</a> | <a href="{{ register }}">Регистрация</a></li>
+					{% for information in informationsbottom %}
+					<li><a href="{{ information.href }}"><i class="icon icon-right-dir"></i> {{ information.title }}</a></li>
+					{% endfor %}
+					<li><a href="{{ articles }}"><i class="icon icon-right-dir"></i> {{ text_articles }}</a></li>
+					<li><a href="{{ special }}"><i class="icon icon-right-dir"></i> Акции</a></li>
+				</ul>
+			</div>
+			
+			<div class="col-about">
+				<h4>{{ names }}</h4>
+				 
+				<div class="abouts">
+					<p class="abouts-left">{{ abouts }}</p>
+					{#<div class="abouts-right"><img src="/image/ya-market-rating.jpg" alt=""></div>#}
+				</div>
+				
+			</div>
+		
+		</div>
+		<div class="row justify-contentspas">
+		
+			<div class="search-product-id">
+				<h4>Оплата онлайн</h4>
+				<div class="errors"></div>
+				<div class="search-product-body">
+				<input type="text" name="payment_order_id" value="" placeholder="Номер заказа" id="input-payment-order" class="input2" />
+				 <button type="button" id="button-payment-order" disabled="disabled">Оплатить</button>
+				</div>
+			  </div>
+			  
+			  <div class="search-product-id">
+				<h4>Повторить заказ</h4>
+				<div class="errors errors-repeat"></div>
+				<div class="search-product-body">
+				<input type="text" name="repeat_order_id" value="" placeholder="Номер заказа" id="input-repeat-order" class="input2" />
+				 <button type="button" id="button-repeat-order" disabled="disabled">Повторить</button>
+				</div>
+			  </div>
+			 
+			 <div class="search-product-id">
+				<h4>Поиск товара по ID</h4>
+				<div class="errors errors-search"></div>
+				<div class="search-product-body">
+				<input type="text" name="search_product_id" value="" placeholder="ID товара" id="input-search-product-id" class="input2" />
+				 <button type="button" id="button-search-product-id" disabled="disabled">Поиск</button>
+				</div>
+			  </div>
+		</div>
+	</div>
+	
+ 
+	 
+</footer>
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+ 
+{{ prmn_cmngr_cities }}
+</body></html>

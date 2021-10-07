@@ -1,0 +1,4 @@
+&lt;/strong&gt;
+																&lt;p&gt;Белки: &lt;span class=&quot;font-weight-500&quot;&gt;25&lt;/span&gt;&lt;/p&gt;
+																&lt;p&gt;Жиры: &lt;span class=&quot;font-weight-500&quot;&gt;14&lt;/span&gt;&lt;/p&gt;
+															

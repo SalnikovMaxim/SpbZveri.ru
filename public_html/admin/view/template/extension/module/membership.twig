@@ -1,0 +1,1190 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+      		<ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+   		</div>
+  	</div>
+  	<div class="container-fluid">
+  		{% if error_warning %}
+		<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+		  <button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %}
+		{% if success %}
+	    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+	    	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	    </div>
+	    {% endif %}
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">{{ text_toggle_navigation }}</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                    <a class="navbar-brand">
+                        <i class="fa fa-users" aria-hidden="true"></i> {{ heading_title }}
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                    {% if license  %}
+						<li class="dropdown{% if license %} active{% endif %}">
+                        	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> {{ text_settings }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+								<li {% if license %}class="active"{% endif %}><a href="#common-settings" data-toggle="tab">{{ text_common }}</a></li>
+                                <li><a href="#email-notification-settings" data-toggle="tab">{{ text_email_notifications }}</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-credit-card"></i> {{ text_club_cards }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#cards-list" id="menu-cards-list" data-loadurl="{{ cards_list }}" data-toggle="tab">{{ text_lists }}</a></li>
+                                <li><a href="#card-form" id="menu-card-form" data-loadurl="{{ card_add }}" data-toggle="tab">{{ text_add }}</a></li>
+                                <li><a href="#cards-generator" id="menu-card-generator" data-loadurl="{{ cards_generator }}" data-toggle="tab">{{ text_generator }}</a></li>
+								<li><a href="#cards-history" id="menu-cards-history" data-loadurl="{{ cards_history }}" data-toggle="tab">{{ text_general_history }}</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#card-settings" data-toggle="tab">{{ text_settings }}</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#default-card-settings" data-toggle="tab">{{ text_default_card_settings }}</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-gift" aria-hidden="true"></i> {{ text_gifts }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#gifts-list" id="menu-gifts-list" data-loadurl="{{ gifts_list }}" data-toggle="tab">{{ text_lists }}</a></li>
+                                <li><a href="#gift-form" id="menu-gift-form" data-loadurl="{{ gift_add }}" data-toggle="tab">{{ text_add }}</a></li>
+                                <li><a href="#gifts-history" id="menu-gifts-history" data-loadurl="{{ gifts_history }}" data-toggle="tab">{{ text_general_history }}</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#gift-settings" data-toggle="tab">{{ text_settings }}</a></li>
+                            </ul>
+                        </li>
+					{% endif %}
+ 
+                            </ul>
+                        </li>
+                    </ul>
+                    <p class="navbar-btn navbar-right btn-group">
+                    	<button onclick="save();" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                        <button type="submit" form="form-module_membership" data-toggle="tooltip" title="{{ button_save_and_exit }}" class="btn btn-default"><i class="fa fa-save"></i></button>
+                        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default" role="button"><i class="fa fa-reply"></i></a>
+            	    </p>
+                </div>
+            </div>
+        </nav>
+   	 	<div class="panel panel-default no-upper-border">
+      		<div class="panel-body">
+      			<form action="{{ save_and_exit }}" method="post" enctype="multipart/form-data" id="form-module_membership" class="form-horizontal">
+	      			<div class="tab-content">
+					{#{% if license %}#}
+	      				<div class="tab-pane fade{% if license %} in active{% endif %}" id="common-settings">
+	      					<a href="" id="helper-ajax-menu" style="display: none;"></a>
+	      					<div class="form-group">
+	      						<label class="col-sm-2 control-label" for="status-enabled"><span data-toggle="tooltip" title="{{ help_status }}">{{ entry_status }}</span></label>
+	      						<div class="col-sm-4">
+	      							<div class="radio-switch">
+									{% if not module_membership_status %} 
+						                <input type="radio" name="module_membership_status" value="0" id="status-disabled" checked>
+                                        <label class="col-sm-4" for="status-enabled">{{ text_disabled }}</label>
+	      								<input type="radio" name="module_membership_status" value="1" id="status-enabled">
+                                        <label class="col-sm-4" for="status-disabled">{{ text_enabled }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_status" value="0" id="status-disabled">
+                                        <label class="col-sm-4" for="status-enabled">{{ text_disabled }}</label>
+                                        <input type="radio" name="module_membership_status" value="1" id="status-enabled" checked>
+                                        <label class="col-sm-4" for="status-disabled">{{ text_enabled }}</label>  
+						            {% endif %}
+	      							</div>
+	      						</div>
+	      					</div>
+					        <div class="form-group">
+	      						<label class="col-sm-2 control-label" for="condition"><span data-toggle="tooltip" title="{{ help_condition }}">{{ entry_condition }}</span></label>
+	      						<div class="col-sm-10">
+	      							<select name="module_membership[condition]" id="condition" class="form-control">
+	      								<option value="0">{{ text_none }}</option>
+										{% for information in informations %} 
+										{% if (module_membership['condition'] and information['information_id'] == module_membership['condition']) %} 
+	      								<option value="{{ information['information_id'] }}" selected="selected">{{ information['title'] }}</option>
+										{% else %} 
+	      								<option value="{{ information['information_id'] }}">{{ information['title'] }}</option>
+										{% endif %} 
+	      								{% endfor %}
+	      							</select>
+	      						</div>
+	      					</div>
+	      					<div class="form-group">
+                  				<label class="col-sm-2 control-label" for="customer_group_id"><span data-toggle="tooltip" title="{{ help_customer_group }}">{{ entry_customer_group }}</span></label>
+                  				<div class="col-sm-6">
+                    				<select name="module_membership[customer_group_id]" id="customer_group_id" class="form-control">
+                    				<option value="0">{{ text_none }}</option>
+                      				{% for customer_group in customer_groups %} 
+                      					{% if (module_membership['customer_group_id'] and customer_group['customer_group_id'] == module_membership['customer_group_id']) %} 
+                      					<option value="{{ customer_group['customer_group_id'] }}" selected="selected">{{ customer_group['name'] }}</option>
+                      					{% else %} 
+                      					<option value="{{ customer_group['customer_group_id'] }}">{{ customer_group['name'] }}</option>
+                      					{% endif %} 
+                      				{% endfor %} 
+                    				</select>
+                  				</div>
+                  				<label class="col-sm-2 control-label" for="auto_transfer_to_group-enabled"><span data-toggle="tooltip" title="{{ help_auto_transfer_to_group }}">{{ entry_auto_transfer_to_group }}</span></label>
+	      						<div class="col-sm-2">
+	      							<div class="radio-switch">
+	      							{% if not module_membership['auto_transfer_to_group'] %} 
+						                <input type="radio" name="module_membership[auto_transfer_to_group]" value="0" id="auto_transfer_to_group-disabled" checked>
+                                        <label class="col-sm-4" for="auto_transfer_to_group-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership[auto_transfer_to_group]" value="1" id="auto_transfer_to_group-enabled">
+                                        <label class="col-sm-4" for="auto_transfer_to_group-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership[auto_transfer_to_group]" value="0" id="auto_transfer_to_group-disabled">
+                                        <label class="col-sm-4" for="auto_transfer_to_group-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership[auto_transfer_to_group]" value="1" id="auto_transfer_to_group-enabled" checked>
+                                        <label class="col-sm-4" for="auto_transfer_to_group-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+                			</div>
+						</div>
+						<div class="tab-pane fade" id="email-notification-settings">
+							<a class="btn btn-default pull-right" role="button" data-toggle="collapse" href="#message-macros-collapse" aria-expanded="false" aria-controls="message-macros-collapse">{{ text_message_template_macros }} <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+							<div class="clearfix"></div>
+					        <div id="message-macros-collapse" class="collapse">
+					        	<div class="panel panel-default">
+					        		<div class="panel-body">
+					        			<div class="alert alert-info" role="alert">
+											<button type="button" class="close" data-dismiss="alert">&times;</button>
+									  		<p><i class="fa fa-info-circle" aria-hidden="true"></i> {{ text_about_macros }}</p>
+										</div>
+						        		<div class="col-sm-3">
+						        			{{ text_card_template_macros }} 
+						        		</div>
+						        		<div class="col-sm-3">
+						        			{{ text_card_hisory_template }} 
+						        		</div>
+						        		<div class="col-sm-3">
+						        			{{ text_gift_template_macros }} 
+						        		</div>
+						        		<div class="col-sm-3">
+						        			{{ text_customer_template_macros }} 
+						        		</div>
+					        		</div>
+					        	</div>
+					        </div>
+							<legend>{{ text_club_cards }}</legend>
+							<div class="form-group">
+	      						<label class="col-sm-2 control-label" for="notification_customer_creation-enabled"><span data-toggle="tooltip" title="{{ help_notification_customer_creation }}">{{ entry_notification_customer_creation }}</span></label>
+	      						<div class="col-sm-1">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_notification['customer_creation'] %} 
+						                <input type="radio" name="module_membership_notification[customer_creation]" value="0" id="notification_customer_creation-disabled" checked>
+                                        <label class="col-sm-4" for="notification_customer_creation-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_notification[customer_creation]" value="1" id="notification_customer_creation-enabled">
+                                        <label class="col-sm-4" for="notification_customer_creation-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_notification[customer_creation]" value="0" id="notification_customer_creation-disabled">
+                                        <label class="col-sm-4" for="notification_customer_creation-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_notification[customer_creation]" value="1" id="notification_customer_creation-enabled" checked>
+                                        <label class="col-sm-4" for="notification_customer_creation-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      						<label class="col-sm-1 control-label" for="notification_customer_creation_template">{{ entry_message_template }}</label>
+								<div class="col-sm-8">
+									<ul class="nav nav-tabs" role="tablist">
+									{% for language in languages %} 
+										<li{{ language_id == language['language_id'] ? ' class="active"' : '' }}><a href="#notification_customer_creation_template_{{ language['language_id'] }}" aria-controls="notification_customer_creation_template_{{ language['language_id'] }}" role="tab" data-toggle="tab"><img src="{{ language_flag[language['language_id']] }}" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+									{% endfor %}	
+									</ul>
+									<div class="tab-content">
+									{% for language in languages %} 
+										<div role="tabpanel" class="tab-pane{{ language_id == language['language_id'] ? ' active' : '' }}" id="notification_customer_creation_template_{{ language['language_id'] }}">	
+											<textarea name="module_membership_notification[customer_creation_template][{{ language['language_id'] }}]" placeholder="{{ entry_message_template }}" class="form-control summernote">{{ module_membership_notification['customer_creation_template'][language.language_id] }}</textarea>
+										</div>
+									{% endfor %} 
+									</div>
+								</div>
+	      					</div>
+							<div class="form-group">
+	      						<label class="col-sm-2 control-label" for="notification_card_issuance-enabled"><span data-toggle="tooltip" title="{{ help_notification_card_issuance }}">{{ entry_notification_card_issuance }}</span></label>
+	      						<div class="col-sm-1">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_notification['card_issuance'] %} 
+						                <input type="radio" name="module_membership_notification[card_issuance]" value="0" id="notification_card_issuance-disabled" checked>
+                                        <label class="col-sm-4" for="notification_card_issuance-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_notification[card_issuance]" value="1" id="notification_card_issuance-enabled">
+                                        <label class="col-sm-4" for="notification_card_issuance-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_notification[card_issuance]" value="0" id="notification_card_issuance-disabled">
+                                        <label class="col-sm-4" for="notification_card_issuance-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_notification[card_issuance]" value="1" id="notification_card_issuance-enabled" checked>
+                                        <label class="col-sm-4" for="notification_card_issuance-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      						<label class="col-sm-1 control-label" for="notification_card_issuance_template">{{ entry_message_template }}</label>
+								<div class="col-sm-8">
+									<ul class="nav nav-tabs" role="tablist">
+									{% for language in languages %} 
+										<li{{ language_id == language['language_id'] ? ' class="active"' : '' }}><a href="#notification_card_issuance_template_{{ language['language_id'] }}" aria-controls="notification_card_issuance_template_{{ language['language_id'] }}" role="tab" data-toggle="tab"><img src="{{ language_flag[language['language_id']] }}" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+									{% endfor %}	
+									</ul>
+									<div class="tab-content">
+									{% for language in languages %} 
+										<div role="tabpanel" class="tab-pane{{ language_id == language['language_id'] ? ' active' : '' }}" id="notification_card_issuance_template_{{ language['language_id'] }}">	
+											<textarea name="module_membership_notification[card_issuance_template][{{ language['language_id'] }}]" placeholder="{{ entry_message_template }}" class="form-control summernote">{{ module_membership_notification['card_issuance_template'][language.language_id] }}</textarea>
+										</div>
+									{% endfor %} 
+									</div>
+								</div>
+	      					</div>
+	      					<div class="form-group">
+	      						<label class="col-sm-2 control-label" for="notification_card_balance_change-enabled"><span data-toggle="tooltip" title="{{ help_notification_card_balance_change }}">{{ entry_notification_card_balance_change }}</span></label>
+	      						<div class="col-sm-1">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_notification['card_balance_change'] %} 
+						                <input type="radio" name="module_membership_notification[card_balance_change]" value="0" id="notification_card_balance_change-disabled" checked>
+                                        <label class="col-sm-4" for="notification_card_balance_change-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_notification[card_balance_change]" value="1" id="notification_card_balance_change-enabled">
+                                        <label class="col-sm-4" for="notification_card_balance_change-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_notification[card_balance_change]" value="0" id="notification_card_balance_change-disabled">
+                                        <label class="col-sm-4" for="notification_card_balance_change-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_notification[card_balance_change]" value="1" id="notification_card_balance_change-enabled" checked>
+                                        <label class="col-sm-4" for="notification_card_balance_change-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      						<label class="col-sm-1 control-label" for="notification_card_balance_change_template">{{ entry_message_template }}</label>
+								<div class="col-sm-8">
+									<ul class="nav nav-tabs" role="tablist">
+									{% for language in languages %} 
+										<li{{ language_id == language['language_id'] ? ' class="active"' : '' }}><a href="#notification_card_balance_change_template_{{ language['language_id'] }}" aria-controls="notification_card_balance_change_template_{{ language['language_id'] }}" role="tab" data-toggle="tab"><img src="{{ language_flag[language['language_id']] }}" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+									{% endfor %}	
+									</ul>
+									<div class="tab-content">
+									{% for language in languages %} 
+										<div role="tabpanel" class="tab-pane{{ language_id == language['language_id'] ? ' active' : '' }}" id="notification_card_balance_change_template_{{ language['language_id'] }}">	
+											<textarea name="module_membership_notification[card_balance_change_template][{{ language['language_id'] }}]" placeholder="{{ entry_message_template }}" class="form-control summernote">{{ module_membership_notification['card_balance_change_template'][language.language_id] }}</textarea>
+										</div>
+									{% endfor %} 
+									</div>
+								</div>
+	      					</div>
+							<legend>{{ text_gifts }}</legend>
+							<div class="form-group">
+	      						<label class="col-sm-2 control-label" for="notification_gift_confirm-enabled"><span data-toggle="tooltip" title="{{ help_notification_gift_confirm }}">{{ entry_notification_gift_confirm }}</span></label>
+	      						<div class="col-sm-1">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_notification['gift_confirm'] %} 
+						                <input type="radio" name="module_membership_notification[gift_confirm]" value="0" id="notification_gift_confirm-disabled" checked>
+                                        <label class="col-sm-4" for="notification_gift_confirm-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_notification[gift_confirm]" value="1" id="notification_gift_confirm-enabled">
+                                        <label class="col-sm-4" for="notification_gift_confirm-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_notification[gift_confirm]" value="0" id="notification_gift_confirm-disabled">
+                                        <label class="col-sm-4" for="notification_gift_confirm-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_notification[gift_confirm]" value="1" id="notification_gift_confirm-enabled" checked>
+                                        <label class="col-sm-4" for="notification_gift_confirm-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      						<label class="col-sm-1 control-label" for="notification_gift_confirm_template">{{ entry_message_template }}</label>
+								<div class="col-sm-8">
+									<ul class="nav nav-tabs" role="tablist">
+									{% for language in languages %} 
+										<li{{ language_id == language['language_id'] ? ' class="active"' : '' }}><a href="#notification_gift_confirm_template_{{ language['language_id'] }}" aria-controls="notification_gift_confirm_template_{{ language['language_id'] }}" role="tab" data-toggle="tab"><img src="{{ language_flag[language['language_id']] }}" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+									{% endfor %}	
+									</ul>
+									<div class="tab-content">
+									{% for language in languages %} 
+										<div role="tabpanel" class="tab-pane{{ language_id == language['language_id'] ? ' active' : '' }}" id="notification_gift_confirm_template_{{ language['language_id'] }}">	
+											<textarea name="module_membership_notification[gift_confirm_template][{{ language['language_id'] }}]" placeholder="{{ entry_message_template }}" class="form-control summernote">{{ module_membership_notification['gift_confirm_template'][language.language_id] }}</textarea>
+										</div>
+									{% endfor %} 
+									</div>
+								</div>
+	      					</div>
+						</div>
+						<div class="tab-pane fade" id="cards-list"></div>
+						<div class="tab-pane fade" id="card-form"></div>
+						<div class="tab-pane fade" id="cards-generator"></div>
+						<div class="tab-pane fade" id="cards-history"></div>
+                        <div class="tab-pane fade" id="card-settings">
+                            <div class="form-group">
+	      						<label class="col-sm-2 control-label" for="card_status-enabled"><span data-toggle="tooltip" title="{{ help_status_total }}">{{ entry_status_total }}</span></label>
+	      						<div class="col-sm-4">
+	      							<div class="radio-switch">
+	      							{% if module_membership_card_status %} 
+						                <input type="radio" name="module_membership_card_status" value="0" id="card_status-disabled">
+                                        <label class="col-sm-4" for="card_status-enabled">{{ text_disabled }}</label>
+	      								<input type="radio" name="module_membership_card_status" value="1" id="card_status-enabled" checked>
+                                        <label class="col-sm-4" for="card_status-disabled">{{ text_enabled }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_card_status" value="0" id="card_status-disabled" checked>
+                                        <label class="col-sm-4" for="card_status-enabled">{{ text_disabled }}</label>
+                                        <input type="radio" name="module_membership_card_status" value="1" id="card_status-enabled">
+                                        <label class="col-sm-4" for="card_status-disabled">{{ text_enabled }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      					</div>
+	      					<hr />
+							<div class="col-sm-10 col-sm-offset-2">
+								<ul class="nav nav-tabs" role="tablist">
+								{% for language in languages %} 
+									<li {{ language_id == language['language_id'] ? ' class="active"' : '' }}><a href="#card_{{ language['language_id'] }}" aria-controls="card_{{ language['language_id'] }}" role="tab" data-toggle="tab"><img src="{{ language_flag[language['language_id']] }}" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+								{% endfor %}	
+								</ul>		
+							</div>
+							<div class="tab-content">
+							{% for language in languages %} 
+								<div role="tabpanel" class="tab-pane{{ language_id == language['language_id'] ? ' active' : '' }}" id="card_{{ language['language_id'] }}">	
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="card_name_{{ language['language_id'] }}"><span data-toggle="tooltip" title="{{ help_name_total }}">{{ entry_name_total }}</span></label>
+										<div class="col-sm-10">
+											<input type="text" name="module_membership_card[name][{{ language['language_id'] }}]" value="{{ module_membership_card['name'][language['language_id']] }}" placeholder="{{ entry_name_total }}" id="card_name_{{ language['language_id'] }}" class="form-control" />
+										</div>
+									</div>
+									<div class="form-group">	
+			      						<label class="col-sm-2 control-label" for="nearest_discount_description_{{ language['language_id'] }}"><span data-toggle="tooltip" title="{{ help_nearest_discount_description }}">{{ entry_nearest_discount_description }}</span></label>
+										<div class="col-sm-10">
+											<textarea name="module_membership_card[nearest_discount_description][{{ language['language_id'] }}]" placeholder="{{ entry_nearest_discount_description }}" class="form-control summernote">{{ module_membership_card['nearest_discount_description'][language.language_id] }}</textarea>
+										</div> 
+								    </div>
+								</div>
+							{% endfor %} 
+							</div>
+							<hr />
+							<div class="form-group">
+						    	<label class="col-sm-2 control-label" for="nearest_discount-enabled"><span data-toggle="tooltip" title="{{ help_nearest_discount }}">{{ entry_nearest_discount }}</span></label>
+	      						<div class="col-sm-2">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_card['nearest_discount'] %} 
+						                <input type="radio" name="module_membership_card[nearest_discount]" value="0" id="nearest_discount-disabled" checked>
+                                        <label class="col-sm-4" for="nearest_discount-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_card[nearest_discount]" value="1" id="nearest_discount-enabled">
+                                        <label class="col-sm-4" for="nearest_discount-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_card[nearest_discount]" value="0" id="nearest_discount-disabled">
+                                        <label class="col-sm-4" for="nearest_discount-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_card[nearest_discount]" value="1" id="nearest_discount-enabled" checked>
+                                        <label class="col-sm-4" for="nearest_discount-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      					</div>
+                            <div class="form-group">
+								<label class="col-sm-2 control-label" for="code_characters"><span data-toggle="tooltip" title="{{ help_code_characters }}">{{ entry_code_characters }}</span></label>
+								<div class="col-sm-2">
+									<div class="well well-sm" style="height: 135px; overflow: auto;">
+						 
+										{% for k,v in code_characters %}
+										<div class="checkbox">
+											<label>
+
+											{% if module_membership_card['code_characters'] and module_membership_card['code_characters'] is iterable and k in module_membership_card['code_characters'] %}
+											<input type="checkbox" name="module_membership_card[code_characters][]" value="{{ k }}" checked="checked" /> {{ v }}
+											{% else %}
+												<input type="checkbox" name="module_membership_card[code_characters][]" value="{{ k }}" /> {{ v }}
+											{% endif %}
+											</label>
+										</div>
+									{% endfor %}
+									</div>
+								</div>
+                                <label class="col-sm-2 control-label" for="code_prefix"><span data-toggle="tooltip" title="{{ help_code_prefix }}">{{ entry_code_prefix }}</span></label>
+								<div class="col-sm-2">
+					                <input type="text" name="module_membership_card[code_prefix]" value="{{ module_membership_card['code_prefix'] }}" placeholder="{{ entry_code_prefix }}" id="code_prefix" class="form-control" />
+					            </div>
+								<label class="col-sm-2 control-label" for="code_length"><span data-toggle="tooltip" title="{{ help_code_length }}">{{ entry_code_length }}</span></label>
+								<div class="col-sm-2">
+					                <input type="text" name="module_membership_card[code_length]" value="{{ module_membership_card['code_length'] }}" placeholder="{{ entry_code_length }}" id="code_length" class="form-control" />
+					            </div>
+					        </div>
+					        <div class="form-group">
+					        	<label class="col-sm-2 control-label" for="order_expiry"><span data-toggle="tooltip" title="{{ help_order_expiry }}">{{ entry_order_expiry }}</span></label>
+						        <div class="col-sm-5">
+						        	<select name="module_membership_card[order_expiry][type]" id="order_expiry_type" class="form-control">
+									{% for k,v in time %}
+	      								{% if (module_membership_card['order_expiry'][type] is defined and k == module_membership_card['order_expiry'][type]) %}
+						            	<option value="{{ k }}" selected="selected">{{ v }}</option>
+										{% else %}
+						            	<option value="{{ k }}">{{ v }}</option>
+						            	{% endif %}
+						            {% endfor %}
+						            </select>
+						        </div>
+						        <div class="col-sm-5">		
+						            <input type="text" name="module_membership_card[order_expiry][value]" value="{{ module_membership_card['order_expiry'][value] }}" placeholder="{{ entry_order_expiry }}" id="order_expiry" class="form-control" />
+						        </div>
+					        </div>
+
+                           <div class="form-group">
+                                <label class="col-sm-2 control-label" for="accounted_orders_balance"><span data-toggle="tooltip" title="{{ help_accounted_orders_balance }}">{{ entry_accounted_orders_balance }}</span></label>
+	      						<div class="col-sm-4">
+	      							<div class="well well-sm" style="height: 135px; overflow: auto;">
+										{% for k, v in order_types_b %}
+										<div class="checkbox">
+										  <label>
+										  {% if module_membership_card['accounted_orders_balance'] and module_membership_card['accounted_orders_balance'] is iterable and k in module_membership_card['accounted_orders_balance'] %}
+											<input type="checkbox" name="module_membership_card[accounted_orders_balance][]" value="{{ k }}" id="accounted_orders_balance-{{ k }}" checked="checked" /> {{ v }}
+											{% else %}
+											<input type="checkbox" name="module_membership_card[accounted_orders_balance][]" value="{{ k }}" id="accounted_orders_balance-{{ k }}" /> {{ v }}
+											{% endif %}
+										  </label>
+										</div>
+										{% endfor %}
+									 
+									</div>
+	      						</div>		
+                                <label class="col-sm-2 control-label" for="accounted_orders_request"><span data-toggle="tooltip" title="{{ help_accounted_orders_request }}">{{ entry_accounted_orders_request }}</span></label>
+	      						<div class="col-sm-4">
+	      							<div class="well well-sm" style="height: 135px; overflow: auto;">
+									{% for k, v in order_types_r %}
+										<div class="checkbox">
+											<label>
+										{% if module_membership_card['accounted_orders_request'] and module_membership_card['accounted_orders_request'] is iterable and k in module_membership_card['accounted_orders_request'] %}
+											<input type="checkbox" name="module_membership_card[accounted_orders_request][]" value="{{ k }}" checked="checked" /> {{ v }}
+										{% else %}
+												<input type="checkbox" name="module_membership_card[accounted_orders_request][]" value="{{ k }}" /> {{ v }}
+										{% endif %}
+											</label>
+										</div>
+									{% endfor %}
+									</div>
+	      						</div>
+	      					</div>
+                            <div class="form-group">	
+                                <label class="col-sm-2 control-label" for="request_threshold"><span data-toggle="tooltip" title="{{ help_request_threshold }}">{{ entry_threshold }}</span></label>
+				                <div class="col-sm-10">
+				                	<div class="input-group">
+				                		<input type="text" name="module_membership_card[request_threshold]" value="{{ module_membership_card['request_threshold'] }}" placeholder="{{ entry_threshold }}" id="request_threshold" class="form-control" />
+				                		<span class="input-group-addon">{{ currency_symbol }}</span>
+	    							</div>
+				                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="auto_issuance_card"><span data-toggle="tooltip" title="{{ help_auto_issuance_card }}">{{ entry_auto_issuance_card }}</span></label>
+	      						<div class="col-sm-10">
+							 
+	      							<select name="module_membership_card[auto_issuance_card]" id="auto_issuance_card" class="form-control">
+	      								{% for k,v in auto_issuance_types %} 
+	      									{% if (module_membership_card['auto_issuance_card'] is defined and k == module_membership_card['auto_issuance_card']) %} 
+	      								<option value="{{ k }}" selected="selected">{{ v }}</option>
+	      									{% else %} 
+	      								<option value="{{ k }}">{{ v }}</option>
+	      									{% endif %} 
+	      								{% endfor %} 
+	      							</select>
+ 
+	      						</div>
+                            </div>
+                            <div class="form-group">
+                            	<label class="col-sm-2 control-label" for="logged_card_request-enabled"><span data-toggle="tooltip" title="{{ help_logged_card_request }}">{{ entry_logged_card_request }}</span></label>
+	      						<div class="col-sm-2">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_card['logged_card_request'] %} 
+						                <input type="radio" name="module_membership_card[logged_card_request]" value="0" id="logged_card_request-disabled" checked>
+                                        <label class="col-sm-4" for="logged_card_request-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_card[logged_card_request]" value="1" id="logged_card_request-enabled">
+                                        <label class="col-sm-4" for="logged_card_request-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_card[logged_card_request]" value="0" id="logged_card_request-disabled">
+                                        <label class="col-sm-4" for="logged_card_request-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_card[logged_card_request]" value="1" id="logged_card_request-enabled" checked>
+                                        <label class="col-sm-4" for="logged_card_request-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>  
+                            </div>
+                            <div class="form-group">
+                            	<label class="col-sm-2 control-label" for="card_request_discount-enabled"><span data-toggle="tooltip" title="{{ help_card_request_discount }}">{{ entry_card_request_discount }}</span></label>
+	      						<div class="col-sm-2">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_card['request_discount'] %} 
+						                <input type="radio" name="module_membership_card[request_discount]" value="0" id="card_request_discount-disabled" checked>
+                                        <label class="col-sm-4" for="card_request_discount-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_card[request_discount]" value="1" id="card_request_discount-enabled">
+                                        <label class="col-sm-4" for="card_request_discount-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_card[request_discount]" value="0" id="card_request_discount-disabled">
+                                        <label class="col-sm-4" for="card_request_discount-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_card[request_discount]" value="1" id="card_request_discount-enabled" checked>
+                                        <label class="col-sm-4" for="card_request_discount-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      						<label class="col-sm-2 control-label" for="first_discount_type"><span data-toggle="tooltip" title="{{ help_first_discount_type }}">{{ entry_first_discount_type }}</span></label>
+	      						<div class="col-sm-2">
+	      							<select name="module_membership_card[first_discount_type]" id="first_discount_type" class="form-control">
+	      								{% for k,v in first_discount_type %} 
+	      									{% if module_membership_card['first_discount_type'] and k == module_membership_card['first_discount_type'] %} 
+	      								<option value="{{ k }}" selected="selected">{{ v }}</option>
+	      									{% else %} 
+	      								<option value="{{ k }}">{{ v }}</option>
+	      									{% endif %} 
+	      								{% endfor %} 
+	      							</select>
+	      						</div>
+	      						<label class="col-sm-2 control-label" for="first_discount_value"><span data-toggle="tooltip" title="{{ help_first_discount_value }}">{{ entry_first_discount_value }}</span></label>
+				                <div class="col-sm-2">
+				                	<input type="text" name="module_membership_card[first_discount_value]" value="{{ module_membership_card['first_discount_value'] }}" placeholder="{{ entry_first_discount_value }}" id="first_discount_value" class="form-control" />
+
+				                </div>     
+				            </div>
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="logged_auto_discount-enabled"><span data-toggle="tooltip" title="{{ help_logged_auto_discount }}">{{ entry_logged_auto_discount }}</span></label>
+	      						<div class="col-sm-2">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_card['logged_auto_discount'] %} 
+						                <input type="radio" name="module_membership_card[logged_auto_discount]" value="0" id="logged_auto_discount-disabled" checked>
+                                        <label class="col-sm-4" for="logged_auto_discount-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_card[logged_auto_discount]" value="1" id="logged_auto_discount-enabled">
+                                        <label class="col-sm-4" for="logged_auto_discount-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_card[logged_auto_discount]" value="0" id="logged_auto_discount-disabled">
+                                        <label class="col-sm-4" for="logged_auto_discount-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_card[logged_auto_discount]" value="1" id="logged_auto_discount-enabled" checked>
+                                        <label class="col-sm-4" for="logged_auto_discount-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div> 
+						    </div>
+                            <div class="form-group">
+				                <label class="col-sm-2 control-label" for="minimum_cost_goods"><span data-toggle="tooltip" title="{{ help_minimum_cost_goods }}">{{ entry_minimum_cost_goods }}</span></label>
+				                <div class="col-sm-10">
+				                	<div class="input-group">
+				                		<input type="text" name="module_membership_card[minimum_cost_goods]" value="{{ module_membership_card['minimum_cost_goods'] }}" placeholder="{{ entry_minimum_cost_goods }}" id="minimum_cost_goods" class="form-control" />
+				                		<span class="input-group-addon">{{ currency_symbol }}</span>
+				                	</div>	
+				                </div>
+                            </div>
+                            <div class="form-group">
+				            	<label class="col-sm-2 control-label" for="maximum_card_discount"><span data-toggle="tooltip" title="{{ help_maximum_card_discount }}">{{ entry_maximum_discount }}</span></label>
+				            	<div class="col-sm-10">
+					            	<div class="input-group">
+				              			<input type="text" name="module_membership_card[maximum_card_discount]" value="{{ module_membership_card['maximum_card_discount'] }}" placeholder="{{ entry_maximum_discount }}" id="maximum_card_discount" class="form-control" />
+				              			<span class="input-group-addon">{{ text_pct }}</span>
+				              		</div>
+			              		</div>
+				          	</div>
+						</div>
+                        <div class="tab-pane fade" id="default-card-settings">
+	      					<div class="form-group">
+	      						<label class="col-sm-2 control-label" for="default-card-status-enabled"><span data-toggle="tooltip" title="{{ help_card_status }}">{{ entry_card_status }}</span></label>
+	      						<div class="col-sm-4">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_default_card['status'] %} 
+						                <input type="radio" name="module_membership_default_card[status]" value="0" id="default-card-status-disabled" checked>
+                                        <label class="col-sm-4" for="default-card-status-enabled">{{ text_disabled }}</label>
+	      								<input type="radio" name="module_membership_default_card[status]" value="1" id="default-card-status-enabled">
+                                        <label class="col-sm-4" for="default-card-status-disabled">{{ text_enabled }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_default_card[status]" value="0" id="default-card-status-disabled">
+                                        <label class="col-sm-4" for="default-card-status-enabled">{{ text_disabled }}</label>
+                                        <input type="radio" name="module_membership_default_card[status]" value="1" id="default-card-status-enabled" checked>
+                                        <label class="col-sm-4" for="default-card-status-disabled">{{ text_enabled }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      					</div>
+				            <div class="form-group">
+				            	<label class="col-sm-2 control-label" for="default-card-date_start"><span data-toggle="tooltip" title="{{ help_card_start }}">{{ entry_start }}</span></label>
+	    						<div class="col-sm-4">
+	    							<div class="input-group">
+	    								<span class="input-group-btn" style="width: 50%;">
+	    									<select name="module_membership_default_card[date_start][type]" class="form-control">
+	    									{% for k,v in time %} 
+	    										{% if (module_membership_default_card['date_start']['type'] is defined and k == module_membership_default_card['date_start']['type']) %} 
+	    										<option value="{{ k }}" selected="selected">{{ v }}</option>
+	    										{% else %} 
+								                <option value="{{ k }}">{{ v }}</option>
+								                {% endif %} 
+								            {% endfor %} 
+								            </select>
+								        </span>
+								     	<input type="text" name="module_membership_default_card[date_start][value]" value="{{ module_membership_default_card['date_start']['value'] }}" placeholder="{{ entry_start }}" id="default-card-date_start" class="form-control" />
+								    </div>
+								</div>
+						        <label class="col-sm-2 control-label" for="default-card-date_expiry"><span data-toggle="tooltip" title="{{ help_card_expiry }}">{{ entry_expiry }}</span></label>
+						        <div class="col-sm-4">
+						        	<div class="input-group">
+						        		<span class="input-group-btn" style="width: 50%;">
+						        			<select name="module_membership_default_card[date_expiry][type]" class="form-control">
+						            		{% for k,v in time %} 
+						            			{% if (module_membership_default_card['date_expiry']['type'] is defined and k == module_membership_default_card['date_expiry']['type']) %} 
+						            			<option value="{{ k }}" selected="selected">{{ v }}</option>
+						            			{% else %} 
+						            			<option value="{{ k }}">{{ v }}</option>
+						            			{% endif %} 
+						            		{% endfor %} 
+						            		</select>
+						            	</span>
+						            	<input type="text" name="module_membership_default_card[date_expiry][value]" value="{{ module_membership_default_card['date_expiry']['value'] }}" placeholder="{{ entry_expiry }}" id="default-card-date_expiry" class="form-control" />
+						            </div>
+						        </div>
+						    </div>
+					        <div class="panel panel-default">
+					        	<div class="panel-heading">
+					            	<h3 class="panel-title"><i class="fa fa-table"></i> {{ text_discount_table }}</h3>
+					            </div>
+					            <div class="panel-body">
+					            	<div class="table-responsive">
+					            		<table class="table table-bordered table-hover" id="table-discounts">
+					            			<thead>
+					            				<tr>
+					            					<td class="text-center"><span data-toggle="tooltip" title="{{ help_discount_base }}">{{ column_discount_base }}</span></td>
+					            					<td class="text-center"><span data-toggle="tooltip" title="{{ help_discount_limit }}">{{ column_discount_limit }}</span></td>
+					            					<td class="text-center"><span data-toggle="tooltip" title="{{ help_discount_value }}">{{ column_discount_value }}</span></td>
+					            					<td class="text-center"><span data-toggle="tooltip" title="{{ help_discount_type }}">{{ column_discount_type }}</span></td>
+					            					<td class="text-center">{{ column_action }}</td>
+					            				</tr>
+					            			</thead>
+					            			<tbody>
+					            			{% if module_membership_default_card['discount'] %} {% set count = 0 %} 
+								                {% for discount in module_membership_default_card['discount'] %} 
+								                <tr>
+								                	<td>
+								                		<select name="module_membership_default_card[discount][{{ count }}][base]" class="form-control">
+								                		{% for v,n in discount_base %} 
+								                			{% if (v == discount['base']) %} 
+								                			<option value="{{ v }}" selected="selected">{{ n }}</option>
+								                			{% else %} 
+								                			<option value="{{ v }}">{{ n }}</option>
+								                			{% endif %} 
+								                		{% endfor %} 
+								                		</select>
+								                	</td>
+								                	<td>
+								                		<input type="text" name="module_membership_default_card[discount][{{ count }}][limit]" value="{{ discount['limit'] }}" placeholder="{{ column_discount_limit }}" class="form-control" />
+								                	</td>
+								                	<td>
+								                		<input type="text" name="module_membership_default_card[discount][{{ count }}][value]" value="{{ discount['value'] }}" placeholder="{{ column_discount_value }}" class="form-control" />
+								                	</td>
+								                	<td>
+								                		<select name="module_membership_default_card[discount][{{ count }}][type]" class="form-control">
+								                		{% for v,n in discount_type %} 
+								                			{% if (v == discount['type']) %} 
+								                			<option value="{{ v }}" selected="selected">{{ n }}</option>
+								                			{% else %} 
+								                			<option value="{{ v }}">{{ n }}</option>
+								                			{% endif %} 
+								                		{% endfor %} 
+								                		</select>
+								                	</td>
+								                	<td class="text-center">
+								                		<button type="button" onclick="$(this).parents('tr').remove()" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+								                	</td>
+								                </tr>
+								                {% set count = count + 1 %} {% endfor %} 
+								            {% endif %} 
+								            </tbody>
+								            <tfoot>
+								                <tr>
+								                	<td colspan="4"></td>
+								                	<td class="text-center">
+								                		<button type="button" onclick="addDiscount('table-discounts', 'module_membership_default_card[discount]')" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+								                	</td>
+								                </tr>
+								            </tfoot>
+								        </table>
+								    </div>
+								</div>
+							</div>
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="default-card-category"><span data-toggle="tooltip" title="{{ help_card_categories }}">{{ entry_categories }}</span></label>
+						    	<div class="col-sm-10">
+						    		<input type="text" name="category" value="" placeholder="{{ entry_categories }}" id="default-card-category" class="form-control" />
+						        	<div id="default-card-categories" class="well well-sm" style="height: 150px; overflow: auto;">
+						        	{% if module_membership_default_card['categories'] %} 
+						        		{% for category in categories %} 
+						        		<div id="default-card-categories-{{ category['category_id'] }}"><i class="fa fa-minus-circle"></i> {{ category['name'] }} 
+						        			<input type="hidden" name="module_membership_default_card[categories][]" value="{{ category['category_id'] }}" />
+						        		</div>
+						        		{% endfor %} 
+						        	{% endif %} 
+						        	</div>
+						        </div>
+						    </div>
+ 
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="default-card-product"><span data-toggle="tooltip" title="{{ help_card_products }}">{{ entry_products }}</span></label>
+						    	<div class="col-sm-10">
+						    		<input type="text" name="product" value="" placeholder="{{ entry_products }}" id="default-card-product" class="form-control" />
+						    		<div id="default-card-products" class="well well-sm" style="height: 150px; overflow: auto;">
+									{% if module_membership_default_card['products'] and module_membership_default_card['products'] is iterable %}
+						    			{% for product in products %} 
+						        		<div id="default-card-products-{{ product['product_id'] }}"><i class="fa fa-minus-circle"></i> {{ product['name'] }} 
+						        			<input type="hidden" name="module_membership_default_card[products][]" value="{{ product['product_id'] }}" />
+						        		</div>
+						        		{% endfor %} 
+						        	{% endif %} 
+						        	</div>
+						        </div>
+						    </div>
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="default-card-logged-enabled"><span data-toggle="tooltip" title="{{ help_logged }}">{{ entry_logged }}</span></label>
+	      						<div class="col-sm-2">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_default_card['logged'] %} 
+						                <input type="radio" name="module_membership_default_card[logged]" value="0" id="default-card-logged-disabled" checked>
+                                        <label class="col-sm-4" for="default-card-logged-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_default_card[logged]" value="1" id="default-card-logged-enabled">
+                                        <label class="col-sm-4" for="default-card-logged-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_default_card[logged]" value="0" id="default-card-logged-disabled">
+                                        <label class="col-sm-4" for="default-card-logged-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_default_card[logged]" value="1" id="default-card-logged-enabled" checked>
+                                        <label class="col-sm-4" for="default-card-logged-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div> 
+						    </div>
+						    <div class="form-group">
+						        <label class="col-sm-2 control-label" for="default-card-free_shipping-enabled"><span data-toggle="tooltip" title="{{ help_free_shipping }}">{{ entry_free_shipping }}</span></label>
+						        <div class="col-sm-2">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_default_card['free_shipping'] %} 
+						                <input type="radio" name="module_membership_default_card[free_shipping]" value="0" id="default-card-free_shipping-disabled" checked>
+                                        <label class="col-sm-4" for="default-card-free_shipping-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_default_card[free_shipping]" value="1" id="default-card-free_shipping-enabled">
+                                        <label class="col-sm-4" for="default-card-free_shipping-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_default_card[free_shipping]" value="0" id="default-card-free_shipping-disabled">
+                                        <label class="col-sm-4" for="default-card-free_shipping-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_default_card[free_shipping]" value="1" id="default-card-free_shipping-enabled" checked>
+                                        <label class="col-sm-4" for="default-card-free_shipping-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+						    </div>
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="default-card-minimum_order_amount"><span data-toggle="tooltip" title="{{ help_minimum_order_amount }}">{{ entry_minimum_order_amount }}</span></label>
+						    	<div class="col-sm-10">
+						    		<div class="input-group">
+						    			<input type="text" name="module_membership_default_card[minimum_order_amount]" value="{{ module_membership_default_card['minimum_order_amount'] }}" placeholder="{{ entry_minimum_order_amount }}" id="default-card-minimum_order_amount" class="form-control" />
+						    			<span class="input-group-addon">{{ currency_symbol }}</span>
+									</div>
+						    	</div>
+						    </div>
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="default-card-maximum_order_amount"><span data-toggle="tooltip" title="{{ help_maximum_order_amount }}">{{ entry_maximum_order_amount }}</span></label>
+						    	<div class="col-sm-10">
+						    		<div class="input-group">
+						    			<input type="text" name="module_membership_default_card[maximum_order_amount]" value="{{ module_membership_default_card['maximum_order_amount'] }}" placeholder="{{ entry_maximum_order_amount }}" id="default-card-maximum_order_amount" class="form-control" />
+						    			<span class="input-group-addon">{{ currency_symbol }}</span>
+									</div>
+						    	</div>
+						    </div>
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="default-card-uses_total"><span data-toggle="tooltip" title="{{ help_uses_total }}">{{ entry_uses_total }}</span></label>
+						    	<div class="col-sm-10">
+						    		<input type="text" name="module_membership_default_card[uses_total]" value="{{ module_membership_default_card['uses_total'] }}" placeholder="{{ entry_uses_total }}" id="default-card-uses_total" class="form-control" />
+						    	</div>
+						    </div>
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="default-card-uses_customer"><span data-toggle="tooltip" title="{{ help_uses_customer }}">{{ entry_uses_customer }}</span></label>
+						        <div class="col-sm-10">
+						        	<input type="text" name="module_membership_default_card[uses_customer]" value="{{ module_membership_default_card['uses_customer'] }}" placeholder="{{ entry_uses_customer }}" id="default-card-uses_customer" class="form-control" />
+						        </div>
+						    </div>
+						</div>
+						<div class="tab-pane fade" id="gifts-list"></div>
+						<div class="tab-pane fade" id="gift-form"></div>
+						<div class="tab-pane fade" id="gifts-history"></div>
+						<div class="tab-pane fade" id="gift-settings">
+                            <div class="form-group">
+	      						<label class="col-sm-2 control-label" for="gift_status-enabled"><span data-toggle="tooltip" title="{{ help_status_total }}">{{ entry_status_total }}</span></label>
+	      						<div class="col-sm-4">
+	      							<div class="radio-switch">
+	      							{% if module_membership_gift['status'] %} 
+						                <input type="radio" name="module_membership_gift[status]" value="0" id="gift_status-disabled">
+                                        <label class="col-sm-4" for="gift_status-enabled">{{ text_disabled }}</label>
+	      								<input type="radio" name="module_membership_gift[status]" value="1" id="gift_status-enabled" checked>
+                                        <label class="col-sm-4" for="gift_status-disabled">{{ text_enabled }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_gift[status]" value="0" id="gift_status-disabled" checked>
+                                        <label class="col-sm-4" for="gift_status-enabled">{{ text_disabled }}</label>
+                                        <input type="radio" name="module_membership_gift[status]" value="1" id="gift_status-enabled">
+                                        <label class="col-sm-4" for="gift_status-disabled">{{ text_enabled }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      					</div>
+	      					<hr />
+							<div class="col-sm-10 col-sm-offset-2">
+								<ul class="nav nav-tabs" role="tablist">
+								{% for language in languages %} 
+									<li{{ language_id == language['language_id'] ? ' class="active"' : '' }}><a href="#gift_{{ language['language_id'] }}" aria-controls="gift_{{ language['language_id'] }}" role="tab" data-toggle="tab"><img src="{{ language_flag[language['language_id']] }}" title="{{ language['name'] }}" /> {{ language['name'] }}</a></li>
+								{% endfor %}	
+								</ul>		
+							</div>
+							<div class="tab-content">
+							{% for language in languages %} 
+								<div role="tabpanel" class="tab-pane{{ language_id == language['language_id'] ? ' active' : '' }}" id="gift_{{ language['language_id'] }}">	
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="gift_name_{{ language['language_id'] }}"><span data-toggle="tooltip" title="{{ help_name_total }}">{{ entry_name_total }}</span></label>
+										<div class="col-sm-10">
+											<input type="text" name="module_membership_gift[name][{{ language['language_id'] }}]" value="{{  module_membership_gift['name'][language['language_id']] }}" placeholder="{{ entry_name_total }}" id="gift_name_{{ language['language_id'] }}" class="form-control" />
+										</div>
+									</div>
+									<div class="form-group">	
+			      						<label class="col-sm-2 control-label" for="nearest_gift_description_{{ language['language_id'] }}"><span data-toggle="tooltip" title="{{ help_nearest_gift_description }}">{{ entry_nearest_gift_description }}</span></label>
+										<div class="col-sm-10">
+											<textarea name="module_membership_gift[nearest_gift_description][{{ language['language_id'] }}]" placeholder="{{ entry_nearest_gift_description }}" class="form-control summernote">{{ module_membership_gift['nearest_gift_description'][language.language_id] }}</textarea>
+										</div> 
+								    </div>
+								</div>
+							{% endfor %} 
+							</div>
+							<hr />
+						    <div class="form-group">
+						    	<label class="col-sm-2 control-label" for="nearest_gift-enabled"><span data-toggle="tooltip" title="{{ help_nearest_gift }}">{{ entry_nearest_gift }}</span></label>
+	      						<div class="col-sm-2">
+	      							<div class="radio-switch">
+	      							{% if not module_membership_gift['nearest_gift'] %} 
+						                <input type="radio" name="module_membership_gift[nearest_gift]" value="0" id="nearest_gift-disabled" checked>
+                                        <label class="col-sm-4" for="nearest_gift-enabled">{{ text_no }}</label>
+	      								<input type="radio" name="module_membership_gift[nearest_gift]" value="1" id="nearest_gift-enabled">
+                                        <label class="col-sm-4" for="nearest_gift-disabled">{{ text_yes }}</label>
+						                {% else %} 
+                                        <input type="radio" name="module_membership_gift[nearest_gift]" value="0" id="nearest_gift-disabled">
+                                        <label class="col-sm-4" for="nearest_gift-enabled">{{ text_no }}</label>
+                                        <input type="radio" name="module_membership_gift[nearest_gift]" value="1" id="nearest_gift-enabled" checked>
+                                        <label class="col-sm-4" for="nearest_gift-disabled">{{ text_yes }}</label>  
+						            {% endif %} 
+	      							</div>
+	      						</div>
+	      					</div> 
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="gift_name_action"><span data-toggle="tooltip" title="{{ help_gift_name_action }}">{{ entry_gift_name_action }}</span></label>
+	      						<div class="col-sm-10">
+	      							<select name="module_membership_gift[name_action]" id="gift_name_action" class="form-control">
+	      								{% for k,v in gift_name_actions %} 
+	      									{% if (module_membership_gift['name_action'] is defined and k == module_membership_gift['name_action']) %} 
+										 
+	      								<option value="{{ k }}" selected="selected">{{ v }}</option>
+	      									{% else %} 
+	      								<option value="{{ k }}">{{ v }}</option>
+	      									{% endif %} 
+	      								{% endfor %} 
+	      							</select>
+	      						</div>
+						    </div>
+						    <div class="form-group">
+                                <label class="col-sm-2 control-label" for="gift_place_of_display"><span data-toggle="tooltip" title="{{ help_gift_place_of_display }}">{{ entry_gift_place_of_display }}</span></label>
+	      						<div class="col-sm-10">
+	      							<div class="well well-sm" style="height: 80px; overflow: auto;">
+									{% for k, v in places_of_display %}
+										<div class="checkbox">
+											<label>
+										{% if module_membership_gift['place_of_display'] and module_membership_gift['place_of_display'] is iterable and k in module_membership_gift['place_of_display'] %}
+												<input type="checkbox" name="module_membership_gift[place_of_display][]" value="{{ k }}" checked="checked" /> {{ v }} 
+										{% else %} 
+												<input type="checkbox" name="module_membership_gift[place_of_display][]" value="{{ k }}" /> {{ v }} 
+										{% endif %} 
+											</label>
+										</div>
+									{% endfor %} 
+									</div>
+	      						</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="gift_giving_mode"><span data-toggle="tooltip" title="{{ help_gift_giving_mode }}">{{ entry_gift_giving_mode }}</span></label>
+	      						<div class="col-sm-10">
+	      							<div class="well well-sm" style="height: 135px; overflow: auto;">
+									{% for k,v in gift_giving_modes %} 
+										<div class="checkbox">
+											<label>
+										{% if module_membership_gift['giving_mode'] and module_membership_gift['giving_mode'] is iterable and k in module_membership_gift['giving_mode'] %}
+												<input type="checkbox" name="module_membership_gift[giving_mode][]" value="{{ k }}" checked="checked" /> {{ v }} 
+										{% else %} 
+												<input type="checkbox" name="module_membership_gift[giving_mode][]" value="{{ k }}" /> {{ v }} 
+										{% endif %} 
+											</label>
+										</div>
+									{% endfor %} 
+									</div>
+	      						</div>
+                            </div>
+						</div>
+					 
+          			</div>
+          		</form>
+      		</div>
+    	</div>
+  	</div>
+</div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+<script type="text/javascript"><!--
+function save() {
+	$.ajax( {
+        url: 'index.php?route=extension/module/membership&user_token={{ user_token }}',
+        type: 'POST',
+        data: $('#common-settings, #email-notification-settings, #card-settings, #default-card-settings, #gift-settings, #contacts').find('input, select, textarea').serialize(),
+		dataType: 'html',
+		success: function (data, textStatus, jqXHR) {
+			var $data = $(data);
+
+			if ($data.find('div.alert-danger').length) {
+				$('.container-fluid:eq(1)').prepend($data.find('div.alert-danger'));
+			} else if ($data.find('div.alert-success').length) {
+				$('.container-fluid:eq(1)').prepend($data.find('div.alert-success'));
+			}
+		}
+	} );
+}
+
+function formHandler(element) {
+	switch (element.id) {
+        case 'accounted_orders_balance-membership_card_orders_total':
+        case 'accounted_orders_balance-membership_card_orders_discount':
+        case 'accounted_orders_balance-completed_orders':
+            var
+				aob_membership_card_orders_total = $('#accounted_orders_balance-membership_card_orders_total:checked').length,
+                aob_membership_card_orders_discount = $('#accounted_orders_balance-membership_card_orders_discount:checked').length,
+                aob_completed_orders = $('#accounted_orders_balance-completed_orders:checked').length;
+
+            if (aob_membership_card_orders_total || aob_membership_card_orders_discount) {
+                $('#accounted_orders_balance-completed_orders').attr('disabled', true);
+            } else {
+                $('#accounted_orders_balance-completed_orders').removeAttr('disabled');
+            }
+
+            if (aob_completed_orders) {
+                $('#accounted_orders_balance-membership_card_orders_total, #accounted_orders_balance-membership_card_orders_discount').attr('disabled', true);
+            } else {
+                $('#accounted_orders_balance-membership_card_orders_total, #accounted_orders_balance-membership_card_orders_discount').removeAttr('disabled');
+            }
+
+            break;
+
+		case 'card_request_discount-enabled':
+		case 'card_request_discount-disabled':
+			if (+element.value) {
+				$(element).parent().parent().nextAll().fadeIn();
+			} else {
+				$(element).parent().parent().nextAll().fadeOut();
+			}
+
+			break;
+	}
+}
+
+function addDiscount(id, name) {
+	var number = $('#' + id + ' tbody tr').length;
+	var row = '<tr>';
+		
+	row += '<td><select name="' + name + '[' + number + '][base]" class="form-control">{% for v,n in discount_base %}<option value="{{ v }}">{{ n }}</option>{% endfor %}</select></td>';
+	row += '<td><input type="text" name="' + name + '[' + number + '][limit]" value="" placeholder="{{ column_discount_limit }}" class="form-control" /></td>';
+	row += '<td><input type="text" name="' + name + '[' + number + '][value]" value="" placeholder="{{ column_discount_value }}" class="form-control" /></td>';
+	row += '<td><select name="' + name + '[' + number + '][type]" class="form-control">{% for v,n in discount_type %}<option value="{{ v }}">{{ n }}</option>{% endfor %}</select></td>';
+	row += '<td class="text-center"><button type="button" onclick="$(this).parents(\'tr\').remove()" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+	row += '</tr>';
+		
+	$('#' + id + ' tbody').append(row);
+}
+
+function deleteData(self, data_type) {
+	var post_data;
+
+	if (self.id.match(/button\-delete/i)) {
+		post_data = $('input[name^="selected"]:checked').serialize();
+	} else {
+		post_data = 'selected[]=' + $(self).parents('tr').find('input[name^="selected"]').attr('value');
+	}
+
+	$.ajax( {
+		url: 'index.php?route=extension/module/membership/deleteData&data_type=' + data_type + '&user_token={{ user_token }}',
+		type: 'POST',
+		data: post_data,
+		dataType: 'json',
+		success: function(json) {
+			if (json['success'] && json['deleted'] instanceof Array) {
+				for(var i in json['deleted']) {
+					$('input[value="' + json['deleted'][i] + '"]').parents('tr').fadeOut('slow');
+				}
+				
+				$('.container-fluid:eq(1)').prepend('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			}
+		}
+	} );
+}
+
+function changeStatus(self, data_type, change_type) {
+	if (change_type === undefined) {
+    	change_type = '';
+  	}
+
+	$.ajax( {
+		url: 'index.php?route=extension/module/membership/changeStatus&data_type=' + data_type + '&user_token={{ user_token }}',
+		type: 'POST',
+		data: 'id=' + parseInt($(self).parents('tr').find('input[name^="selected"]').attr('value')) + '&change_type=' + change_type,
+		dataType: 'json',
+		success: function(json) {
+			if (typeof json['new_status_id'] != 'undefined') {
+				switch (json['new_status_id']) {
+					case 0:
+						$(self).parents('tr').find('span').html(json['new_status_text']).removeClass().addClass('label label-danger');
+						
+						break;
+					case 1:
+						$(self).parents('tr').find('span').html(json['new_status_text']).removeClass().addClass('label label-success');
+						
+						break;
+					case 2:
+						$(self).parents('tr').find('span').html(json['new_status_text']).removeClass().addClass('label label-warning');
+						
+						break;		
+				}
+			}
+		}
+	} );
+}
+
+$(function() {
+	if (window.location.hash) {
+		var url_parts = window.location.href.replace('#', '&').split('&');
+
+		$('#helper-ajax-menu').attr('href', url_parts[0] + '/' + url_parts[2] + '&' + url_parts[3] + '&' + url_parts[1]);
+		
+		setTimeout(function() { $('#helper-ajax-menu').trigger('click'); }, 100);
+	}
+	
+	$('.summernote').summernote();
+	
+	$.ajaxSetup( {
+		beforeSend: function () {
+			$('body').fadeTo('fast', 0.7).prepend('<div class="cssload-loader"><div class="cssload-flipper"><div class="cssload-front"></div><div class="cssload-back"></div></div></div>');
+		},
+		complete: function () {
+			var $alerts = $('.alert-danger, .alert-success');
+			
+			if ($alerts.length !== 0) {
+				setTimeout(function() { $alerts.fadeOut() }, 5000);
+			}
+
+			$('body').fadeTo('fast', 1)
+			$('div.cssload-loader').remove();
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+	   		console.log(textStatus);
+	    }
+	} );
+
+	$('[data-loadurl]').on('click', function (e) {
+		$(e.target.hash).load(e.currentTarget.dataset.loadurl);
+	} );
+
+    $('input[name*="accounted_orders_balance"]:checked, input[id^="card_request_discount"]:checked').each(function() {
+        formHandler(this);
+    } );
+
+    $('input[name*="accounted_orders_balance"], input[id^="card_request_discount"]').on('change', function(e) {
+        formHandler(e.currentTarget);
+    } );
+	
+	$('div.tab-pane').on('click', 'a[href^="http"]', function (e) {
+		e.preventDefault();
+		
+		var container_id = $(e.currentTarget).parents('div.tab-pane').attr('id');
+
+		if (e.currentTarget.href.match(/(addCard|editCard)/i)) {
+			var 
+				$menu_card_form = $('#menu-card-form'),
+				loadurl = $menu_card_form.attr('data-loadurl');
+				
+			$menu_card_form.attr('data-loadurl', e.currentTarget.href).trigger('click').attr('data-loadurl', loadurl);
+		} else if (e.currentTarget.href.match(/(addGift|editGift)/i)) {
+			var 
+				$menu_gift_form = $('#menu-gift-form'),
+				loadurl = $menu_gift_form.attr('data-loadurl');
+				
+			$menu_gift_form.attr('data-loadurl', e.currentTarget.href).trigger('click').attr('data-loadurl', loadurl);
+		} else {
+			$('#' + container_id).load(e.currentTarget.href);
+		}
+	} );
+
+	$('div.tab-pane').on('change', 'input[name^="select"]', function() {
+		var selected = $('input[name^="selected"]:checked');
+
+		if (selected.length) {
+			$('button[id^="button-delete"]').attr('disabled', false);
+		} else {
+			$('button[id^="button-delete"]').attr('disabled', true);
+		}
+	} );
+
+    // Categories
+    $('#default-card-category').autocomplete({
+        'source': function(request, response) {
+            $.ajax({
+                url: 'index.php?route=catalog/category/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+                dataType: 'json',
+                beforeSend: function () {},
+                complete: function () {},
+                success: function(json) {
+                    response($.map(json, function(item) {
+                        return {
+                            label: item['name'],
+                            value: item['category_id']
+                        }
+                    }));
+                }
+            });
+        },
+        'select': function(item) {
+            this.value = '';
+
+            $('#default-card-categories-' + item['value']).remove();
+
+            $('#default-card-categories').append('<div id="default-card-categories-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="module_membership_default_card[categories][]" value="' + item['value'] + '" /></div>');
+        }
+    });
+
+    $('#default-card-categories').delegate('.fa-minus-circle', 'click', function() {
+        $(this).parent().remove();
+    } );
+
+	// Products
+	$('#default-card-product').autocomplete({
+		'source': function(request, response) {
+			$.ajax({
+				url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+				dataType: 'json',	
+				beforeSend: function () {},
+				complete: function () {},		
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: item['name'],
+							value: item['product_id']
+						}
+					}));
+				}
+			});
+		},
+		'select': function(item) {
+			this.value = '';
+			
+			$('#default-card-products-' + item['value']).remove();
+			
+			$('#default-card-products').append('<div id="default-card-products-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="module_membership_default_card[products][]" value="' + item['value'] + '" /></div>');	
+		}
+	});
+
+	$('#default-card-products').delegate('.fa-minus-circle', 'click', function() {
+		$(this).parent().remove();
+	});
+} );
+//--></script>
+{{ footer }}

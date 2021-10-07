@@ -1,0 +1,67 @@
+{{ header }} 
+<div class="container">
+	<div itemscope="" itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
+		{% for key, breadcrumb in breadcrumbs %}
+		<span itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem" class="breadcrumb-item">
+			{% if key + 1 < breadcrumbs|length %}
+			<a itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% else %}
+			<a rel="nofollow" itemprop="item" title="{{ breadcrumb.text }}" href="{{ breadcrumb.href }}">
+				<span itemprop="name">{{ breadcrumb.text }}</span>
+				<meta itemprop="position" content="{{ key + 1 }}">
+			</a>
+			{% endif %}
+		</span>
+		{% endfor %}
+	</div>
+    <div class="row">{{ column_left }} 
+    {% if (column_left and column_right) %} 
+    	{% set class = 'col-sm-6' %} 
+    {% elseif (column_left or column_right) %} 
+    	{% set class = 'col-sm-9' %} 
+    {% else %} 
+    	{% set class = 'col-sm-12' %} 
+    {% endif %} 
+    	<div id="content" class="{{ class }}">{{ content_top }} 
+			<h1 class="page-title">{{ heading_title }}</h1>
+    		{% if (card_code is defined) %} 
+    		<div class="table-responsive">
+    			<table class="table table-hover">
+    				<tbody>
+    					<tr>
+    						<td>{{ text_card_code }}</td>
+    						<td class="text-center">{{ card_code }}</td>
+    					</tr>
+    					<tr>
+    						<td>{{ text_discount }}</td>
+    						<td class="text-center">{{ card_discount }}</td>
+    					</tr>
+    					<tr>
+    						<td>{{ text_total }}</td>
+    						<td class="text-center">{{ card_total }}</td>
+    					</tr>
+    					<tr class="success">
+    						<td>{{ text_savings }}</td>
+    						<td class="text-center">{{ card_savings }}</td>
+    					</tr>
+    				</tbody>
+    			</table>
+    		</div>
+    		{% else %} 
+    		<p>{{ text_not_membership }}</p>
+    		{% endif %} 
+    		{% if (text_condition is defined) %} 
+    		<p>{{ text_condition }}</p>
+    		{% endif %} 
+    		<div class="buttons clearfix">
+    				<a href="{{ continue }}" class="btn btn-primary">Вернуться в личный кабинет</a>
+    		</div>
+    		{{ content_bottom }} 
+    	</div>
+    	{{ column_right }} 
+    </div>
+</div>
+{{ footer }}

@@ -1,0 +1,93 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<ul class="breadcrumb">
+			{% for breadcrumb in breadcrumbs %} 
+				<li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+			{% endfor %} 
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+    {% if (error_warning) %} 
+    	<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+    		<button type="button" class="close" data-dismiss="alert">&times;</button>
+    	</div>
+    {% endif %} 
+    	<div class="panel panel-default">
+    		<div class="panel-heading clearfix">
+    			<h3 class="panel-title pull-left" style="padding-top: 9px;"><i class="fa fa-credit-card"></i> {{ heading_title }}</h3>
+    			<div class="pull-right">
+	    			<button type="submit" form="form-membership-card" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+					<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+    			</div>
+    		</div>
+    		<div class="panel-body">
+    			<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-membership-card" class="form-horizontal">
+    				<div class="form-group">
+	      				<label class="col-sm-2 control-label" for="status-enabled"><span data-toggle="tooltip" title="{{ help_status }}">{{ entry_status }}</span></label>
+	      				<div class="col-sm-4">
+	      					<div class="radio-switch">
+	      					{% if total_membership_card_status %} 
+						        <input type="radio" name="total_membership_card_status" value="0" id="status-disabled">
+                                <label class="col-sm-4" for="status-enabled">{{ text_disabled }}</label>
+	      						<input type="radio" name="total_membership_card_status" value="1" id="status-enabled" checked>
+                                <label class="col-sm-4" for="status-disabled">{{ text_enabled }}</label>
+						    {% else %} 
+                                <input type="radio" name="total_membership_card_status" value="0" id="status-disabled" checked>
+                                <label class="col-sm-4" for="status-enabled">{{ text_disabled }}</label>
+                                <input type="radio" name="total_membership_card_status" value="1" id="status-enabled">
+                                <label class="col-sm-4" for="status-disabled">{{ text_enabled }}</label>  
+						    {% endif %} 
+	      					</div>
+	      				</div>
+	      			</div>
+    				<div class="form-group">
+    					<label class="col-sm-2 control-label" for="input-sort-order"><span data-toggle="tooltip" title="{{ help_sort_order }}">{{ entry_sort_order }}</span></label>
+    					<div class="col-sm-10">
+    						<input type="text" name="total_membership_card_sort_order" value="{{ total_membership_card_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort-order" class="form-control" />
+    					</div>
+    				</div>
+    				<div class="form-group">
+	      				<label class="col-sm-2 control-label" for="use_with_coupon-enabled"><span data-toggle="tooltip" title="{{ help_use_with_coupon }}">{{ entry_use_with_coupon }}</span></label>
+	      				<div class="col-sm-4">
+	      					<div class="radio-switch">
+	      					{% if total_membership_card_use_with_coupon %} 
+						        <input type="radio" name="total_membership_card_use_with_coupon" value="0" id="use_with_coupon-disabled">
+                                <label class="col-sm-4" for="use_with_coupon-enabled">{{ text_disabled }}</label>
+	      						<input type="radio" name="total_membership_card_use_with_coupon" value="1" id="use_with_coupon-enabled" checked>
+                                <label class="col-sm-4" for="use_with_coupon-disabled">{{ text_enabled }}</label>
+						    {% else %} 
+                                <input type="radio" name="total_membership_card_use_with_coupon" value="0" id="use_with_coupon-disabled" checked>
+                                <label class="col-sm-4" for="use_with_coupon-enabled">{{ text_disabled }}</label>
+                                <input type="radio" name="total_membership_card_use_with_coupon" value="1" id="use_with_coupon-enabled">
+                                <label class="col-sm-4" for="use_with_coupon-disabled">{{ text_enabled }}</label>  
+						    {% endif %} 
+	      					</div>
+	      				</div>
+	      			</div>
+    				<div class="form-group">
+	      				<label class="col-sm-2 control-label" for="use_with_voucher-enabled"><span data-toggle="tooltip" title="{{ help_use_with_voucher }}">{{ entry_use_with_voucher }}</span></label>
+	      				<div class="col-sm-4">
+	      					<div class="radio-switch">
+	      					{% if total_membership_card_use_with_voucher %} 
+						        <input type="radio" name="total_membership_card_use_with_voucher" value="0" id="use_with_voucher-disabled">
+                                <label class="col-sm-4" for="use_with_voucher-enabled">{{ text_disabled }}</label>
+	      						<input type="radio" name="total_membership_card_use_with_voucher" value="1" id="use_with_voucher-enabled" checked>
+                                <label class="col-sm-4" for="use_with_voucher-disabled">{{ text_enabled }}</label>
+						    {% else %} 
+                                <input type="radio" name="total_membership_card_use_with_voucher" value="0" id="use_with_voucher-disabled" checked>
+                                <label class="col-sm-4" for="use_with_voucher-enabled">{{ text_disabled }}</label>
+                                <input type="radio" name="total_membership_card_use_with_voucher" value="1" id="use_with_voucher-enabled">
+                                <label class="col-sm-4" for="use_with_voucher-disabled">{{ text_enabled }}</label>  
+						    {% endif %} 
+	      					</div>
+	      				</div>
+	      			</div>
+    			</form>
+    		</div>
+    	</div>
+    </div>
+</div>
+{{ footer }}

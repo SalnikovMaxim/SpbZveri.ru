@@ -1,0 +1,33 @@
+<div class="header-module header-module-two">
+	<div class="container">
+		<div class="row">
+			<div class="header-module-left">
+			 {{ heading_title }}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="manufacturer">
+		<ul>
+			{% for manufacturer in manufacturers %}
+			<li><a href="{{ manufacturer.href }}" title="Все товары производителя {{ manufacturer.name }}"><img src="{{ manufacturer.image }}" alt="{{ manufacturer.name }}"></a></li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$('.manufacturer ul').bxSlider({
+		pager: true,
+		controls: false,
+		auto: true,
+		pause: 10000,
+		maxSlides: 10,
+		slideMargin: 30,        
+		slideWidth: 95
+	});
+});
+</script>

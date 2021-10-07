@@ -1,0 +1,171 @@
+.no-upper-border {
+    border-top: none !important;
+    margin-top: -20px;
+}
+
+.no-border {
+    border: 1px !important;
+}
+
+.radio-switch input {
+    display: none;
+}
+
+.radio-switch input[type=radio]:not(:checked) + label {
+    display: none;
+
+}
+
+.radio-switch label {
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    float: left;
+    position: relative;
+    cursor: pointer;
+    margin: 0 2% 0 0;
+    padding: 8px 8px;
+    overflow: hidden;
+    border: none;
+    border-radius: 3px;
+    color: #ffffff;
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    text-align: center;
+    background: #f01a1a;
+    -webkit-box-shadow: 0 6px 0 0 #ac0c0c;
+    box-shadow: 0 6px 0 0 #ac0c0c ;
+}
+
+.radio-switch input[id$="enabled"] + label {
+    top: 2px;
+    background: #75a74d;
+    text-align: center;
+    -webkit-box-shadow: 0 3px 0 0 #5c843d;
+    box-shadow: 0 3px 0 0 #5c843d ;
+}
+
+.radio-switch label:hover {
+  color: #e3e3e3;
+}
+
+.cssload-loader {
+	width: 24px;
+	height: 24px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 9999;
+	transform: translate3d(-50%, -50%, 0);
+		-o-transform: translate3d(-50%, -50%, 0);
+		-ms-transform: translate3d(-50%, -50%, 0);
+		-webkit-transform: translate3d(-50%, -50%, 0);
+		-moz-transform: translate3d(-50%, -50%, 0);
+	perspective: 1200;
+		-o-perspective: 1200;
+		-ms-perspective: 1200;
+		-webkit-perspective: 1200;
+		-moz-perspective: 1200;
+}
+
+.cssload-flipper {
+	position: relative;
+	display: block;
+	height: inherit;
+	width: inherit;
+	animation: cssload-flip 1.38s infinite ease-in-out;
+		-o-animation: cssload-flip 1.38s infinite ease-in-out;
+		-ms-animation: cssload-flip 1.38s infinite ease-in-out;
+		-webkit-animation: cssload-flip 1.38s infinite ease-in-out;
+		-moz-animation: cssload-flip 1.38s infinite ease-in-out;
+	transform-style: preserve-3d;
+		-o-transform-style: preserve-3d;
+		-ms-transform-style: preserve-3d;
+		-webkit-transform-style: preserve-3d;
+		-moz-transform-style: preserve-3d;
+}
+
+.cssload-front,
+.cssload-back {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	background-color: #f01a1a;
+	height: 100%;
+	width: 100%;
+	backface-visibility: hidden;
+}
+
+.cssload-back {
+	background-color: #666666;
+	z-index: 800;
+	transform: rotateY(-180deg);
+		-o-transform: rotateY(-180deg);
+		-ms-transform: rotateY(-180deg);
+		-webkit-transform: rotateY(-180deg);
+		-moz-transform: rotateY(-180deg);
+}
+
+
+
+@keyframes cssload-flip {
+	0% {
+		transform: perspective(117px) rotateX(0deg) rotateY(0deg);
+	}
+	50% {
+		transform: perspective(117px) rotateX(-180.1deg) rotateY(0deg);
+	}
+	100% {
+		transform: perspective(117px) rotateX(-180deg) rotateY(-179.9deg);
+	}
+}
+
+@-o-keyframes cssload-flip {
+	0% {
+		-o-transform: perspective(117px) rotateX(0deg) rotateY(0deg);
+	}
+	50% {
+		-o-transform: perspective(117px) rotateX(-180.1deg) rotateY(0deg);
+	}
+	100% {
+		-o-transform: perspective(117px) rotateX(-180deg) rotateY(-179.9deg);
+	}
+}
+
+@-ms-keyframes cssload-flip {
+	0% {
+		-ms-transform: perspective(117px) rotateX(0deg) rotateY(0deg);
+	}
+	50% {
+		-ms-transform: perspective(117px) rotateX(-180.1deg) rotateY(0deg);
+	}
+	100% {
+		-ms-transform: perspective(117px) rotateX(-180deg) rotateY(-179.9deg);
+	}
+}
+
+@-webkit-keyframes cssload-flip {
+	0% {
+		-webkit-transform: perspective(117px) rotateX(0deg) rotateY(0deg);
+	}
+	50% {
+		-webkit-transform: perspective(117px) rotateX(-180.1deg) rotateY(0deg);
+	}
+	100% {
+		-webkit-transform: perspective(117px) rotateX(-180deg) rotateY(-179.9deg);
+	}
+}
+
+@-moz-keyframes cssload-flip {
+	0% {
+		-moz-transform: perspective(117px) rotateX(0deg) rotateY(0deg);
+	}
+	50% {
+		-moz-transform: perspective(117px) rotateX(-180.1deg) rotateY(0deg);
+	}
+	100% {
+		-moz-transform: perspective(117px) rotateX(-180deg) rotateY(-179.9deg);
+	}
+}

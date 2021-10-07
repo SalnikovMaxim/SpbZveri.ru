@@ -1,0 +1,160 @@
+<div class="table-responsive">
+<div class="pull-right" style="padding-bottom: 7px;">
+	<button type="button" title="{{ button_delete }}" class="btn btn-danger" data-toggle="tooltip" id="button-delete-card-histories" onclick="confirm('{{ text_confirm }}') ? deleteData(this, 'cardHistory') : false;" disabled="disabled"><i class="fa fa-trash-o"></i></button>
+</div>
+	<table class="table table-bordered table-hover" id="table-history">
+		<thead>
+			<tr>
+				<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked).trigger('change');" /></td>
+				<td class="text-center">
+				{% if (sort == 'order_id') %} 
+					<a href="{{ sort_order_id }}" class="{{ order|lower }}">{{ column_order_id }}</a>
+				{% else %} 
+					<a href="{{ sort_order_id }}">{{ column_order_id }}</a>
+				{% endif %}	
+				</td>
+				<td class="text-center">
+				{% if (sort == 'customer') %} 
+					<a href="{{ sort_customer }}" class="{{ order|lower }}">{{ column_customer }}</a>
+				{% else %} 
+					<a href="{{ sort_customer }}">{{ column_customer }}</a>
+				{% endif %} 
+				</td>
+				<td class="text-center">
+				{% if (sort == 'total_without_discount') %} 
+					<a href="{{ sort_total_without_discount }}" class="{{ order|lower }}">{{ column_total_without_discount }}</a>
+				{% else %} 
+					<a href="{{ sort_total_without_discount }}">{{ column_total_without_discount }}</a>
+				{% endif %} 
+				</td>
+				<td class="text-center">
+				{% if (sort == 'discount') %} 
+					<a href="{{ sort_discount }}" class="{{ order|lower }}">{{ column_discount }}</a>
+				{% else %} 
+					<a href="{{ sort_discount }}">{{ column_discount }}</a>
+				{% endif %} 
+				</td>
+				<td class="text-center">
+				{% if (sort == 'total') %} 
+					<a href="{{ sort_total }}" class="{{ order|lower }}">{{ column_total }}</a>
+				{% else %} 
+					<a href="{{ sort_total }}">{{ column_total }}</a>
+				{% endif %} 
+				</td>
+				<td class="text-center">
+				{% if (sort == 'datetime_added') %} 
+					<a href="{{ sort_datetime_added }}" class="{{ order|lower }}">{{ column_datetime_added }}</a>
+				{% else %} 
+					<a href="{{ sort_datetime_added }}">{{ column_datetime_added }}</a>
+				{% endif %} 
+				</td>
+				<td class="text-center">{{ column_action }}</td>
+			</tr>
+    	</thead>
+    	<tbody>
+    	{% if (histories) %} 
+    		{% for history in histories %} 
+    		{% if (not history['status']) %} {% set history_total = history_total - 1 %} 
+    		<tr class="danger">
+    		{% else %} 
+    		<tr>
+    		{% endif %} 
+    			<td class="text-center">
+					<input type="checkbox" name="selected[]" value="{{ history['card_history_id'] }}" />
+				</td>
+    			<td class="text-center">
+    			{% if (history['order_id']) %} 
+					<a href="index.php?route=sale/order/info&user_token={{ user_token }}&order_id={{ history['order_id'] }}" target="_blank">{{ history['order_id'] }}</a>
+				{% endif %} 
+    			</td>
+    			<td class="text-center">{{ history['customer'] }}</td>
+    			<td class="text-center">{{ history['total_without_discount'] }}</td>
+    			<td class="text-center">{{ history['discount'] }}</td>
+    			<td class="text-center">{{ history['total'] }}</td>
+    			<td class="text-center">{{ history['datetime_added'] }}</td>
+    			<td class="text-center"><button type="button" onclick="confirm('{{ text_confirm }}') ? deleteData(this, 'cardHistory') : false;" class="btn btn-danger" data-toggle="tooltip" title="{{ button_delete }}"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+    		</tr>	
+    		{% endfor %} 
+    	{% else %} 
+    		<tr>
+        		<td class="text-center" colspan="8">{{ text_no_results }}</td>
+        	</tr>
+      	{% endif %} 
+    	</tbody>
+    	<tfoot style="font-weight: bold;">
+    		<tr>
+    			<td colspan="8"><strong>{{ text_total }}:</strong></td>
+    		</tr>
+    		<tr> 
+    			<td></td>
+    			<td class="text-center" style="vertical-align: middle;">{{ history_total }}</td>
+    			<td></td>
+    			<td id="history-total_without_discount" class="text-center" style="vertical-align: middle;">{{ card_totals['total_without_discount'] }}</td>
+    			<td id="history-discount" class="text-center" style="vertical-align: middle;">{{ card_totals['discount'] }}</td>
+    			<td id="history-total" class="text-center" style="vertical-align: middle;">{{ card_totals['total'] }}</td>
+    			<td></td>
+    			<td class="text-center"><button type="button" id="button-edit-totals" class="btn btn-primary" data-toggle="tooltip" title="{{ button_edit }}"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+    		</tr>
+		</tfoot>
+    </table>
+</div>
+<div class="row">
+  <div class="col-sm-6 text-left">{{ pagination }}</div>
+  <div class="col-sm-6 text-right">{{ results }}</div>
+</div>
+<script type="text/javascript"><!--
+$(function() {
+	$('#table-history').on('click', '#button-edit-totals', function() {
+		var 
+			$td_total_without_discount = $('#history-total_without_discount'),
+			$td_discount = $('#history-discount'),
+			$td_total = $('#history-total'),
+			$input_total_without_discount = $('<input type="text" name="history_total_without_discount" value="' + $td_total_without_discount.text() + '" id="input-history-total_without_discount" class="form-control">'),
+			$input_discount = $('<input type="text" name="history_discount" value="' + $td_discount.text() + '" id="input-history-discount" class="form-control">'),
+			$input_total = $('<input type="text" name="history_total" value="' + $td_total.text() + '" id="input-history-total" class="form-control">');
+		
+		$td_total_without_discount.html($input_total_without_discount);
+		$td_discount.html($input_discount);
+		$td_total.html($input_total);
+		
+		$(this).replaceWith('<button type="button" id="button-save-totals" class="btn btn-success" data-toggle="tooltip" title="{{ button_save }}"><i class="fa fa-check" aria-hidden="true"></i></button>');
+	} );
+
+	$('#table-history').on('click', '#button-save-totals', function() {
+		var 
+			$input_total_without_discount = $('#input-history-total_without_discount'),
+			$input_discount = $('#input-history-discount'),
+			$input_total = $('#input-history-total');
+		
+		$.ajax( {
+			url: 'index.php?route=extension/module/membership/changeCardTotals&user_token={{ user_token }}',
+			type: 'POST',
+			data: '&card_id={{ card_id }}&total_without_discount=' +  parseFloat($input_total_without_discount.val()) + '&discount=' +  parseFloat($input_discount.val()) + '&total=' +  parseFloat($input_total.val()),
+			dataType: 'json',
+			success: function(json) {
+				if (typeof json['card_history_id'] != 'undefined') {
+					var row = '<tr style="display: none;">';
+			
+					row += '<td class="text-center"><input type="checkbox" name="selected[]" value="' + json['card_history_id'] + '" /></td>';
+					row += '<td class="text-center">0</td>';
+					row += '<td></td>';
+					row += '<td class="text-center">' + json['total_without_discount'] + '</td>';
+					row += '<td class="text-center">' + json['discount'] + '</td>';
+					row += '<td class="text-center">' + json['total'] + '</td>';
+					row += '<td></td>';
+					row += '<td class="text-center"><button type="button" onclick="deleteData(this, \'deleteCardHistory\');" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>';
+					row += '</tr>';
+						
+					$('#table-history tbody').append(row).find('tr:last').show('slow');
+				}
+			}
+		});
+
+		$input_total_without_discount.parent().html($input_total_without_discount.val());
+		$input_discount.parent().html($input_discount.val());
+		$input_total.parent().html($input_total.val());
+		
+		$(this).replaceWith('<button type="button" id="button-edit-totals" class="btn btn-primary" data-toggle="tooltip" title="{{ button_edit }}"><i class="fa fa-pencil" aria-hidden="true"></i></button>');
+	} );
+} );
+//--></script>

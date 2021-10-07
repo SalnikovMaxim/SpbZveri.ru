@@ -1,0 +1,69 @@
+<div class="table table-bordered" >
+  <div class="breadcrumb"><strong><?php echo $heading_title; ?></strong></div>
+  <div class="box-content">
+
+	<div id="ordertrack"></div>
+    <h2 id="ordertrack-title"></h2>
+    {{ entry_order_id }}<br />
+    <input type="text" name="trk_order_id" value="" />
+	<br />{{ entry_email }}<br />
+	<input type="text" name="trk_email" value="kashpyrenkovasiliu@gmail.com" />
+	
+    <div class="buttons">
+      <div class="left"><a id="button-ordertrack" class="btn btn-primary"><span>{{ button_ordertrack }}</span></a></div>
+    </div>
+
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#button-ordertrack').bind('click', function() {
+	$.ajax({
+		type: 'POST',
+		url: 'index.php?route=extension/module/ordertrack/trackorder',
+		dataType: 'json',
+		data: 'order_id=' + encodeURIComponent($('input[name=\'trk_order_id\']').val()) + '&email=' + encodeURIComponent($('input[name=\'trk_email\']').val()),
+		beforeSend: function() {
+			$('.success, .warning').remove();
+			$('#button-ordertrack').attr('disabled', true);
+		 
+		},
+		complete: function() {
+			$('#button-ordertrack').attr('disabled', false);
+			$('.attention').remove();
+		},
+		success: function(json) {
+			if (json.error) {
+				$('#ordertrack-title').after('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>' + json.error + '</div>');
+			}
+		 
+			if (json.success) {
+				//$('#ordertrack-title').after('<div class="success">' + data.success + '</div>');
+						 	
+				$('input[name=\'order_id\']').val('');
+				$('input[name=\'email\']').val('');
+	 
+				html = '';
+		 
+				var i;
+				for (i = 1; i < json.success.length; ++i) {
+					html += '<div class="productnames" data-value="' + json.success[i]['product_id'] + '">';
+					html += '<div class="productnames">' + json.success[i]['name'] + json.success[i]['product_id'] +  ' </div>';
+					html += '<div class="productnames">' + json.success[i]['model'] + '</div>';
+					
+					var i2;
+					for (i2 = 0; i2 < json.success[i]['option'].length; ++i2) {
+						html += '<div class="productnames">Опция ' + json.success[i]['option'][i2]['name'] + '</div>';
+					}
+					cart.add(json.success[i]['product_id'], json.success[i]['quantity']);
+					html += '</div>';
+				}	 
+ 
+ 
+    
+                $('.psdips').html(html);
+			 
+			}
+		}
+	});
+});
+//--></script> 

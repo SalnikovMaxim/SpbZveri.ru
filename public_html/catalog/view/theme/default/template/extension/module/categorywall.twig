@@ -1,0 +1,68 @@
+<div class="menu_category">
+    <ul>
+        {% for category in categories %}
+            {% if category.name != "Акции"%}
+                <li><a href="{{ category.href }}">{{ category.name }}</a></li>
+            {% endif %}
+        {% endfor %}
+        <li><a class="blink" href="https://spbzveri.ru/specials">Акции</a></li>
+        <li><a href="https://spbzveri.ru/brands">Бренды</a></li>
+        <li><a href="https://spbzveri.ru/delivery">Оплата и доставка</a></li>
+    </ul>
+</div>
+
+<div class="tabs">
+	<div class="container">
+		<div class="tabs-category">
+			<div class="tabs__content active">
+				<ul class="list-unstyled">
+				{% for category in categories %}
+				<li class="list-unstyled-li">
+					<div class="list-unstyled-li-item">
+					<div class="category-item-image"><a href="{{ category.href }}"><img src="{{ category.image }}" alt=""></a></div>
+					<div class="caegory-item-names">
+						<a href="{{ category.href }}">{{ category.name }}</a>
+					</div>
+					</div>
+				</li>
+                {% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="tabs" style="display:none;">
+	<div class="container">
+		<div class="tabs-category">
+			{% set cats = 0 %}
+			{% for category in categories %}
+			{% if category.children %}
+			<div class="tabs__content active">
+				{% for children in category.children|batch(category.children|length / category.column|round(1, 'ceil')) %}
+				<ul class="list-unstyled">
+				{% for child in children %}
+				<li class="list-unstyled-li">
+					<div class="list-unstyled-li-item">
+					<div class="category-item-image"><a href="{{ child.href }}"><img src="{{ child.image }}" alt=""></a></div>
+
+					<div class="caegory-item-names">
+						<a href="{{ child.href }}">{{ child.name }}</a>
+					</div>
+					
+					</div>
+				</li>
+				{% endfor %}
+				</ul>
+				{% endfor %}
+			</div>
+			{% set cats = cats + 1 %}
+			{% else %}
+			<div class="tabs__content">
+				Подкатегорий нет
+			</div>
+			{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+</div>

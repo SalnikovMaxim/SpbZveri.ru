@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="spbzveri.ru" id="13f635d3-aff0-469e-8aba-922533d2e2cd" port="22" nameFormat="DESCRIPTIVE" username="reactxxx_maxim" />
+    </configs>
+  </component>
+</project>

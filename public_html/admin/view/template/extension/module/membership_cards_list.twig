@@ -1,0 +1,236 @@
+{% if (error_warning) %} 
+<div class="alert alert-danger">
+  	<i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button>
+ </div>
+{% endif %} 
+{% if (success) %} 
+<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }} 
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %} 
+<div class="well">
+	<div class="row">
+		<div class="col-sm-4">
+			<label class="control-label" for="cards-list-filter_cardowner">{{ entry_cardowner }}</label>
+			<input type="text" name="filter_cardowner" value="{{ filter_cardowner }}" placeholder="{{ entry_cardowner }}" id="cards-list-filter_cardowner" class="form-control" />
+		</div>
+		<div class="col-sm-4">
+			<label class="control-label" for="cards-list-filter_telephone">{{ entry_telephone }}</label>
+			<input type="text" name="filter_telephone" value="{{ filter_telephone }}" placeholder="{{ entry_telephone }}" id="cards-list-filter_telephone" class="form-control" />
+		</div>
+		<div class="col-sm-4">
+			<label class="control-label" for="cards-list-filter_code">{{ entry_code }}</label>
+			<input type="text" name="filter_code" value="{{ filter_code }}" placeholder="{{ entry_code }}" id="cards-list-filter_code" class="form-control" />
+		</div>
+	</div>
+	<div class="row" style="padding-top: 15px;">
+		<div class="col-sm-4 col-sm-offset-8">
+			<button type="button" id="button-cards-list-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ button_filter }}</button>
+		</div>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading clearfix">
+		<h3 class="panel-title pull-left" style="padding-top: 9px;"><i class="fa fa-list"></i> {{ text_discount_cards_list }}</h3>
+		<div class="pull-right">
+			<a href="{{ add }}" id="button-card-add" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+			<button type="button" title="{{ button_delete }}" class="btn btn-danger" data-toggle="tooltip" id="button-delete-cards-list" onclick="confirm('{{ text_confirm }}') ? deleteData(this, 'card') : false;" disabled="disabled"><i class="fa fa-trash-o"></i></button>
+		</div>
+	</div>
+	<div class="panel-body">
+		<div class="table-responsive">
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked).trigger('change');" /></td>
+						<td class="text-center">
+						{% if (sort == 'cardowner') %} 
+							<a href="{{ sort_cardowner }}" class="{{ order|lower }}">{{ column_cardowner }}</a>
+						{% else %} 
+							<a href="{{ sort_cardowner }}">{{ column_cardowner }}</a>
+						{% endif %} 
+						</td>
+						<td class="text-center">
+						{% if (sort == 'code') %} 
+							<a href="{{ sort_code }}" class="{{ order|lower }}">{{ column_code }}</a>
+						{% else %} 
+							<a href="{{ sort_code }}">{{ column_code }}</a>
+						{% endif %} 
+						</td>
+						<td class="text-center">{{ column_discount }}</td>
+						<td class="text-center">
+						{% if (sort == 'total') %} 
+							<a href="{{ sort_total }}" class="{{ order|lower }}">{{ column_balance }}</a>
+						{% else %} 
+							<a href="{{ sort_total }}">{{ column_balance }}</a>
+						{% endif %} 
+						</td>
+						<td class="text-center">
+						{% if (sort == 'date_start') %} 
+							<a href="{{ sort_date_start }}" class="{{ order|lower }}">{{ column_date_start }}</a>
+						{% else %} 
+							<a href="{{ sort_date_start }}">{{ column_date_start }}</a>
+						{% endif %} 
+						</td>
+						<td class="text-center">
+						{% if (sort == 'date_expiry') %} 
+							<a href="{{ sort_date_expiry }}" class="{{ order|lower }}">{{ column_date_expiry }}</a>
+						{% else %} 
+							<a href="{{ sort_date_expiry }}">{{ column_date_expiry }}</a>
+						{% endif %} 
+						</td>
+						<td class="text-center">
+						{% if (sort == 'status') %} 
+							<a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a>
+						{% else %} 
+							<a href="{{ sort_status }}">{{ column_status }}</a>
+						{% endif %} 
+						</td>
+						<td class="text-center">{{ column_action }}</td>
+					</tr>
+				</thead>
+				<tbody>
+				{% if (cards) %} 
+					{% for card in cards %} 
+					<tr>
+						<td class="text-center">
+							<input type="checkbox" name="selected[]" value="{{ card['card_id'] }}" />
+						</td>
+						<td>
+						{% if (card['cardowner']) %} 
+							<a href="index.php?route=customer/customer/edit&user_token={{ user_token }}&customer_id={{ card['customer_id'] }}" target="_blank">{{ card['cardowner'] }}</a>
+						{% endif %} 
+						</td>
+						<td class="text-center">{{ card['code'] }}</td>
+						<td class="text-center">{{ card['discount'] }}</td>
+						<td class="text-right">{{ card['total'] }}</td>
+						<td class="text-center">{{ card['date_start'] }}</td>
+						<td class="text-center">{{ card['date_expiry'] }}</td>
+						<td class="text-center">
+						{% if (card['status'] == 2) %} 
+							<span class="label label-warning" style="cursor: pointer;" onclick="changeStatus(this, 'card');" oncontextmenu="changeStatus(this, 'card', 'all'); return false;">	
+						{% elseif (card['status'] == 1) %}	
+							<span class="label label-success" style="cursor: pointer;" onclick="changeStatus(this, 'card');" oncontextmenu="changeStatus(this, 'card', 'all'); return false;">
+						{% else %} 
+							<span class="label label-danger" style="cursor: pointer;" onclick="changeStatus(this, 'card');" oncontextmenu="changeStatus(this, 'card', 'all'); return false;">
+						{% endif %}		
+							{{ card['status_text'] }} 
+							</span>
+						</td>
+						<td class="text-center">
+							<a href="{{ card['edit'] }}" id="button-card-edit-{{ card['card_id'] }}" title="{{ button_edit }}" class="btn btn-primary" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+							<button type="button" onclick="confirm('{{ text_confirm }}') ? deleteData(this, 'card') : false;" data-toggle="tooltip" data-value="" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+						</td>
+					</tr>
+					{% endfor %} 
+				{% else %} 
+					<tr>
+						<td class="text-center" colspan="9">{{ text_no_results }}</td>
+					</tr>
+				{% endif %} 
+				</tbody>
+			</table>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 text-left">{{ pagination }}</div>
+			<div class="col-sm-6 text-right">{{ results }}</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript"><!--
+$(function() {
+	$('#cards-list-filter_cardowner').autocomplete( {
+		'source': function(request, response) {
+			$.ajax( {
+				url: 'index.php?route=extension/module/membership/autocomplete&user_token={{ user_token }}',
+				dataType: 'json',
+				type: 'POST',
+				data: 'filter_cardowner=' +  encodeURIComponent(request),
+				beforeSend: function () {},
+				complete: function () {},
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: '<i class="fa fa-user" aria-hidden="true"></i> ' + item['cardowner'] + ' <i class="fa fa-phone" aria-hidden="true"></i> ' + item['telephone'],
+							value: item['cardowner']
+						}
+					} ));
+				}
+			} );
+		},
+		'select': function(item) {
+			$(this).val(item['value']);
+		}
+	} );
+	
+	$('#cards-list-filter_telephone').autocomplete( {
+		'source': function(request, response) {
+			$.ajax( {
+				url: 'index.php?route=extension/module/membership/autocomplete&user_token={{ user_token }}',
+				dataType: 'json',
+				type: 'POST',
+				data: 'filter_telephone=' +  encodeURIComponent(request),
+				beforeSend: function () {},
+				complete: function () {},
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: '<i class="fa fa-phone" aria-hidden="true"></i> ' + item['telephone'] + ' <i class="fa fa-user" aria-hidden="true"></i> ' + item['cardowner'],
+							value: item['telephone']
+						}
+					} ));
+				}
+			} );
+		},
+		'select': function(item) {
+			$(this).val(item['value']);
+		}
+	} );
+	
+	$('#cards-list-filter_code').autocomplete( {
+		'source': function(request, response) {
+			$.ajax( {
+				url: 'index.php?route=extension/module/membership/autocomplete&user_token={{ user_token }}',
+				dataType: 'json',
+				type: 'POST',
+				data: 'filter_code=' +  encodeURIComponent(request),
+				beforeSend: function () {},
+				complete: function () {},
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: '<i class="fa fa-credit-card" aria-hidden="true"></i> ' + item['code'],
+							value: item['code']
+						}
+					} ));
+				}
+			} );
+		},
+		'select': function(item) {
+			$(this).val(item['value']);
+		}
+	} );	
+	
+	$('#button-cards-list-filter').on('click', function() {
+		var 
+			url = 'index.php?route=extension/module/membership/getCardsList&user_token={{ user_token }}'
+			filter_cardowner = $('#cards-list-filter_cardowner').val(),
+			filter_telephone = $('#cards-list-filter_telephone').val(),
+			filter_code = $('#cards-list-filter_code').val();
+
+		if (filter_cardowner) {
+			url += '&filter_cardowner=' + encodeURIComponent(filter_cardowner);
+		}
+
+		if (filter_telephone) {
+			url += '&filter_telephone=' + encodeURIComponent(filter_telephone);
+		}
+
+		if (filter_code) {
+			url += '&filter_code=' + encodeURIComponent(filter_code);
+		}
+
+		$('#cards-list').load(url);
+	} );
+} );	
+//--></script>
