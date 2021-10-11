@@ -37,13 +37,15 @@
 	color: inherit;
 }
 .icon- {
-	border: 1px solid #ccc;
+    border: 1px solid #fdc500;
+    background: #fdc500;
+    border-radius: 10px;
     width: 10px;
     display: inline-block;
     height: 10px;
     margin: 2px 4px;
-	position: relative;
-	top: 1.5px;
+    position: relative;
+    top: 1.5px;
 }
 .icon-f2 {
 	font-size: 26px;
@@ -4084,6 +4086,11 @@ button#close-pop-popup {
     padding: 10px 20px;
     border-radius: 30px;
     cursor: pointer;
+}
+.menu_category li:hover{
+    background: linear-gradient(#303030, #648bc6);
+    color: white;
+    border: 1px solid #648bc6;
 }
 
 
