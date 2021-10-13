@@ -672,12 +672,8 @@ main {
   background: rgb(250 250 250 / 66%);
   width: 100%; height: 100%;
   top: 0; left: 0;
-  cursor: url(/image/exit.cur), ne-resize;
   display: none;
 }
-
-
-
 footer {
 	flex-shrink: 0;
 	background: #303030;
