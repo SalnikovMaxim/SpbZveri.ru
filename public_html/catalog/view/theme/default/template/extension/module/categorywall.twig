@@ -6,10 +6,18 @@
 				{% for category in categories %}
 				<li class="list-unstyled-li">
 					<div class="list-unstyled-li-item">
-					<div class="category-item-image"><a href="{{ category.href }}"><img src="{{ category.image }}" alt=""></a></div>
-					<div class="caegory-item-names">
-						<a href="{{ category.href }}">{{ category.name }}</a>
-					</div>
+					    <div class="category-item-image">
+					        <div style="width:100%;float:left;">
+					            <a href="{{ category.href }}">
+					                <img src="{{ category.image }}" alt="{{ category.name }}">
+					            </a>
+					        </div>
+					        <div class="category-item-names" style="width:100%;float:left;">
+                                <a href="{{ category.href }}">
+                                    {{ category.name }}
+                                </a>
+                            </div>
+                        </div>
 					</div>
 				</li>
                 {% endfor %}

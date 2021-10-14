@@ -164,7 +164,7 @@ main {
 .flex-header {
 	display: flex;
 	align-items: center;
-	padding: 20px 0;
+	padding: 15px 0;
 }
 .flex-header .logo {
 	width: 244px;
@@ -1132,7 +1132,6 @@ ul.bxslider {
 .tabs .tabs__content ul.list-unstyled li.list-unstyled-li .list-unstyled-li-item {
     padding: 30px;
 	padding-top: 20px;
-    height: 185px;
 	margin-left: 20px;
 	margin-bottom: 20px;
 	display: -webkit-flex;
@@ -1146,7 +1145,6 @@ ul.bxslider {
 .tabs .tabs__content ul.list-unstyled li.list-unstyled-li .list-unstyled-li-item .category-item-image {
 	width: 100%;
     padding-right: 10px;
-    display: flex;
     align-items: center;
 }
 .category-item-image img {
@@ -1169,7 +1167,7 @@ ul.bxslider {
     padding: 5px 0;
     padding-left: 1%;
     position: absolute;
-    margin-top: 165px;
+    margin-top: 165px;category-item-names
 }
 .caegory-item-names a {
 	text-transform: uppercase;
@@ -1178,7 +1176,26 @@ ul.bxslider {
     font-weight: 400;
 }
 
+.category-item-names {
+    background: #633e5a;
+    color: #fff;
+    padding: 5px 0;
+    padding-left: 2%;
+    margin-top: -6px;
+    margin-right: 2px;
+}
+.category-item-names a {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 18px;
+    font-weight: 400;
+}
 
+@media screen and (max-width:769px){
+    body .menu_category ul {
+        display: table-cell;
+    }
+}
 
 .header-module {
     background: linear-gradient(#fdc500, #f7ab4c);
@@ -3147,13 +3164,6 @@ input#button-search {
 	width: 50px;
 }
 
-
-
-
-
-
-
-
 .simple-alert{
 	display: block;
 	position: fixed;
@@ -4082,6 +4092,7 @@ button#close-pop-popup {
     padding: 10px 20px;
     border-radius: 30px;
     cursor: pointer;
+    float:left;
 }
 .menu_category li:hover{
     background: linear-gradient(#303030, #648bc6);
