@@ -43,7 +43,7 @@ $_['entry_bad']                = 'Плохо';
 // Заказ в один клик
 $_['text_fast_checkout']		= 'Заказать в 1 клик';
 $_['text_fast_buy_now']			= 'Заказать в 1 клик';
-$_['text_fast_firstname']		= 'Имя и отчество';
+$_['text_fast_firstname']		= 'Имя';
 $_['text_fast_lastname']		= 'Фамилия';
 $_['text_fast_email']			= 'Email';
 $_['text_fast_phone']			= 'Телефон';

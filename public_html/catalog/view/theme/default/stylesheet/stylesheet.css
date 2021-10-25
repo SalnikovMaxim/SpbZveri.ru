@@ -1191,12 +1191,6 @@ ul.bxslider {
     font-weight: 400;
 }
 
-@media screen and (max-width:769px){
-    body .menu_category ul {
-        display: table-cell;
-    }
-}
-
 .header-module {
     background: linear-gradient(#fdc500, #f7ab4c);
     padding: 17px 0;
@@ -4078,7 +4072,7 @@ button#close-pop-popup {
 }
 
 .menu_category ul{
-    display: flex;
+    text-align: center;
     align-items: center;
     justify-content: center;
 }
@@ -4092,7 +4086,7 @@ button#close-pop-popup {
     padding: 10px 20px;
     border-radius: 30px;
     cursor: pointer;
-    float:left;
+    display: inline-block;
 }
 .menu_category li:hover{
     background: linear-gradient(#303030, #648bc6);

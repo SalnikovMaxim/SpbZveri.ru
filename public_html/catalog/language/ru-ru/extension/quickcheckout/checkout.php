@@ -3,7 +3,7 @@ $_['heading_title']                  = 'Оформление заказа';
 // Text
 $_['text_checkout_option']           = 'Уже зарегистрированы? Войдите';
 $_['text_checkout_account']          = 'Данные клиента';
-$_['text_checkout_payment_address']  = 'Данные плательщика';
+$_['text_checkout_payment_address']  = 'Информация о покупателе';
 $_['text_checkout_shipping_address'] = 'Адрес доставки';
 $_['text_checkout_shipping_method']  = 'Способы доставки';
 $_['text_checkout_payment_method']   = 'Способы оплаты';

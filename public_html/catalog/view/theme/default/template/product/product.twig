@@ -311,7 +311,8 @@
 				 
 				<div class="form-group">
 					{% if stock == 'Есть в наличии' %}
-						<button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="button-cart-product"><i class="icon icon-basket"></i> {{ button_cart }}</button>
+						<button type="button" id="button-cart" data-loading-text="{{ text_loading }}"
+onclick="ym(85810837,'reachGoal','one_click'); return true;" class="button-cart-product"><i class="icon icon-basket"></i> {{ button_cart }}</button>
 					 	<div id="button-fastbuy" class="button-fastbuy"><i class="icon icon-clock"></i> Заказ в 1 клик</div>
 					{% endif %}
 					<button type="button" class="buttonwishlist" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product_id }}');"><i class="icon icon-heart-empty"></i> Добавить в избранные</button>
@@ -325,11 +326,10 @@
 			<form id="fastorderform" role="form" class="one-click-order">
 					<div class="one-click-input">
 						<input type="text" name="fname" value="{{ customer_name }}" id="fname" class="input2" placeholder="{{ text_fast_firstname }}">
-						<input type="text" name="eml" value="{{ email }}" id="eml" class="input2" placeholder="{{ text_fast_email }}">
 						<input type="text" name="phone" value="{{ telephone }}" id="phone" class="input2" placeholder="{{ text_fast_phone }}">
 						<input type="hidden" name="pid" value="{{ product_id }}" />
 						<input type="hidden" name="quantitys" value="{{ minimum }}" />
-						<button id="checkoutnow" type="submit" class="one-click-btn">{{ text_fast_buy_now }}</button>
+						<button id="checkoutnow" onclick="ym(85810837,'reachGoal','one_click'); return true;" type="submit" class="one-click-btn">{{ text_fast_buy_now }}</button>
 						<div id="imgcode"></div>
 					</div>
 				</form>
@@ -464,7 +464,7 @@
 					<button type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="icon icon-heart-empty"></i></button>
 					<button type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="icon icon-exchange"></i></button>
 				</div>
-				<button type="button" onclick="cart.add('{{ product.product_id }}');" class="product-button"><i class="icon icon-basket"></i></button>
+				<button type="button" onclick="cart.add('{{ product.product_id }}');ym(85810837,'reachGoal','one_click');return true;" class="product-button"><i class="icon icon-basket"></i></button>
 			   
 			  </div>
 			</div>
@@ -766,17 +766,17 @@ $(document).ready(function() {
   var pattern = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
   var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     $('#checkoutnow').on('click', function(){
-		
+
 	var fname = $('#fname').val();
-	
+
 	if(fname.length >= 2){
 		$('#fname').removeClass('has-error');
 		var phone = true;
 	} else {
 		$('#fname').addClass('has-error');
-		var fname = false;
+		var fname = "noname";
 	}
-	
+
 	if (pattern.test($("#phone").val())) {
 		$('#phone').removeClass('has-error');
 		var phone = true;
@@ -784,16 +784,9 @@ $(document).ready(function() {
 		$('#phone').addClass('has-error');
 		var phone = false;
 	}
-	
-	if (reg.test($("#eml").val())) {
-		$('#eml').removeClass('has-error');
-		var eml = true;
-	} else {
-		$('#eml').addClass('has-error');
-		var eml = false;
-	}
-	
-		if(fname && phone && eml) {
+
+
+		if(fname && phone) {
 			$.ajax({
 				url: 'index.php?route=checkout/checkout/quickorder',
 				type: 'post',
@@ -806,6 +799,7 @@ $(document).ready(function() {
 					$('#imgcode').html('');
 				},
 				success: function(json) {
+				 console.log(json);
 					if (json['error']) {
 						if (json['error']['option']) {
 							for (i in json['error']['option']) {
@@ -821,18 +815,6 @@ $(document).ready(function() {
 
 						$('#imgcode').html('');
 
-						if (json['error']['fname']) {
-							$('#fname').addClass('has-error');
-						}else{
-							$('#fname').removeClass('has-error');
-						}
-						
-						if (json['error']['eml']) {
-							$('#eml').addClass('has-error');
-						}else{
-							$('#eml').removeClass('has-error');
-						}
-						
 						if (json['error']['phone']) {
 							$('#phone').addClass('has-error');
 						}else{

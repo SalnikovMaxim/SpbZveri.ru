@@ -863,16 +863,16 @@ function loadConfirm() {
 		dataType: 'html',
 		cache: false,
 		beforeSend: function() {
-			{% if confirmation_page %} 
+			{% if confirmation_page %}
 				$('html, body').animate({ scrollTop: 0 }, 'slow');
-			
-				{% if slide_effect %} 
+
+				{% if slide_effect %}
 				$('#quickcheckoutconfirm').slideUp('slow');
-				{% else %}   
+				{% else %}
 				$('#quickcheckoutconfirm').html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></div>');
-				{% endif %} 
-			
-				{% if load_screen %} 
+				{% endif %}
+
+				{% if load_screen %}
 				$.blockUI({
 					message: '<h1 style="color:#ffffff;">{{ text_please_wait }}</h1>',
 					css: {
@@ -887,44 +887,44 @@ function loadConfirm() {
 						color: '#ffffff'
 					}
 				});
-				{% endif %} 
+				{% endif %}
 			{% endif %}
 		},
 		success: function(html) {
-			{% if confirmation_page %} 
-				{% if load_screen %} 
+			{% if confirmation_page %}
+				{% if load_screen %}
 				$.unblockUI();
-				{% endif %} 
-				
+				{% endif %}
+
 				$('#quickcheckoutconfirm').hide().html(html);
-				
-				{% if not auto_submit %} 
-					{% if slide_effect %} 
+
+				{% if not auto_submit %}
+					{% if slide_effect %}
 					$('#quickcheckoutconfirm').slideDown('slow');
-					{% else %}   
+					{% else %}
 					$('#quickcheckoutconfirm').show();
-					{% endif %} 
-				{% else %}   
+					{% endif %}
+				{% else %}
 				$('#quickcheckoutconfirm').after('<div class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></div>');
 				{% endif %}
-			{% else %}   
+			{% else %}
 				$('#terms .terms').hide();
 				$('#payment').html(html).slideDown('fast');
-				
-				{% if auto_submit %} 
+
+				{% if auto_submit %}
 				$('#payment').hide().after('<div class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></div>');
-				{% endif %} 
-				
+				{% endif %}
+
 				$('html, body').animate({ scrollTop: $('#terms').offset().top }, 'slow');
-				
+
 				disableCheckout();
 			{% endif %}
 		},
-		{% if debug %} 
+		{% if debug %}
 		error: function(xhr, ajaxOptions, thrownError) {
-			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			alert("test"+thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 		}
-		{% endif %} 
+		{% endif %}
 	});
 }
 

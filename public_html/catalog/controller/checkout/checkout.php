@@ -160,14 +160,6 @@ class ControllerCheckoutCheckout extends Controller {
 				$json['error']['option'][$product_option['product_option_id']] = sprintf($this->language->get('error_required'), $product_option['name']);
 			}
 		}
- 
-		if(empty($this->request->post['fname'])){
-			$json['error']['fname'] = sprintf($this->language->get('error_required'), $this->language->get('fast_firstname'));
-		}
-
-		if(empty($this->request->post['eml'])){
-			$json['error']['eml'] = sprintf($this->language->get('error_required'), $this->language->get('fast_email'));
-		}
 		
 		if(empty($this->request->post['phone'])){
 			$json['error']['phone'] = sprintf($this->language->get('error_required'), $this->language->get('fast_phone'));
@@ -224,7 +216,7 @@ class ControllerCheckoutCheckout extends Controller {
  
             $fname = $this->request->post['fname'];
  
-            $mail =  $this->request->post['eml'];
+            $mail =  "no@email.com";
             $phone =  $this->request->post['phone'];
 
             $order_data['invoice_prefix'] = $this->config->get('config_invoice_prefix');
@@ -242,7 +234,7 @@ class ControllerCheckoutCheckout extends Controller {
             $order_data['customer_group_id'] = 0;
             $order_data['firstname'] = $this->request->post['fname'];
             $order_data['lastname'] = '';
-            $order_data['email'] = $this->request->post['eml'];
+            $order_data['email'] = "no@email.com";
             $order_data['telephone'] = $this->request->post['phone'];
             $order_data['fax'] = '';
             $order_data['custom_field'] = '';
