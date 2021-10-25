@@ -3570,7 +3570,12 @@ input#button-search {
 	width: 26px;
 }
 .flex-header .collback {
-    display: none;
+    text-align: center;
+    width: 100%;
+    padding-top: 15px;
+}
+.flex-header .collback p{
+    font-size: 18px;
 }
 .flex-header .cart {
 	position: fixed;
